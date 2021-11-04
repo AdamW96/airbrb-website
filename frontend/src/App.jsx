@@ -1,37 +1,25 @@
-import { Grid, makeStyles } from '@material-ui/core';
-import Leftbar from './components/Leftbar';
-import Navbar from './components/Navbar';
-import Feed from './components/Feed';
-import Rightbar from './components/Rightbar';
-import AddNew from './components/AddNew'
+import { Switch, Route } from 'react-router-dom'
 import React from 'react'
-
-const useStyle = makeStyles((theme) => ({
-  rightbar: {
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
-  },
-}));
+import Home from './pages/Home'
+import Register from './pages/Register'
+import Login from './pages/Login'
+// inital global part
+window.showAlert = false
 
 function App () {
-  const styles = useStyle();
-
   return (
     <div>
-      <Navbar />
-      <Grid container>
-        <Grid item sm={2} xs={2}>
-          <Leftbar />
-        </Grid>
-        <Grid item sm={7} xs={10}>
-          <Feed />
-        </Grid>
-        <Grid item sm={3} className={styles.rightbar}>
-          <Rightbar />
-        </Grid>
-      </Grid>
-      <AddNew />
+      <Switch>
+        <Route path="/" exact>
+          <Home />
+        </Route>
+        <Route path="/register" exact>
+          <Register />
+        </Route>
+        <Route path="/login" exact>
+          <Login />
+        </Route>
+      </Switch>
     </div>
   );
 }

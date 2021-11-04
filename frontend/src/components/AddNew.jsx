@@ -6,9 +6,9 @@ import {
   Container,
   TextField,
 } from '@material-ui/core'
-// import { Person } from '@material-ui/icons';
 import React, { useState } from 'react'
 import AddIcon from '@material-ui/icons/Add'
+import AlertMsg from './AlertMsg'
 
 const useStyle = makeStyles((theme) => ({
   addButton: {
@@ -43,12 +43,20 @@ const useStyle = makeStyles((theme) => ({
 }))
 function AddNew () {
   const styles = useStyle()
+  const [alertState, setAlertState] = useState({ alertOpen: false, alertType: 'info', alertContent: 'No data' })
   const [open, setOpen] = useState(false)
+  console.log(alertState)
   const handleOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
     setOpen(false)
+  }
+
+  const showAlert = (type, message) => {
+    window.showAlert = true
+    console.log(window.showAlert)
+    setAlertState({ alertOpen: window.showAlert, alertType: type, alertContent: message })
   }
   return (
     <React.Fragment>
@@ -90,9 +98,13 @@ function AddNew () {
                 className = {styles.text}
               />
             </div>
+            <div>
+              <button type="button" onClick = {() => { showAlert('success', 'nice!!') }}>click</button>
+            </div>
           </form>
         </Container>
       </Modal>
+      <AlertMsg {...alertState}/>
     </React.Fragment>
   )
 }
