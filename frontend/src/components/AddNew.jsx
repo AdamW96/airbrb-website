@@ -5,12 +5,17 @@ import {
   Modal,
   Container,
   TextField,
+  Box
 } from '@material-ui/core'
 import React, { useState } from 'react'
 import AddIcon from '@material-ui/icons/Add'
-import AlertMsg from './AlertMsg'
+import PropTypes from 'prop-types'
 
 const useStyle = makeStyles((theme) => ({
+  container: {
+    display: (props) => (props.currentUser ? 'block' : 'none'),
+  },
+
   addButton: {
     position: 'fixed',
     bottom: 20,
@@ -35,17 +40,16 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   item: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   text: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 }))
-function AddNew () {
-  const styles = useStyle()
-  const [alertState, setAlertState] = useState({ alertType: 'info', alertContent: 'No data' })
+function AddNew (props) {
   const [open, setOpen] = useState(false)
-  console.log(alertState)
+  const { currentUser, setShowAlert } = props
+  const styles = useStyle({ currentUser })
   const handleOpen = () => {
     setOpen(true)
   }
@@ -55,57 +59,69 @@ function AddNew () {
 
   const showAlert = (type, message) => {
     window.showAlert = true
-    setAlertState({ alertType: type, alertContent: message })
+    setShowAlert({ alertType: type, alertContent: message })
   }
   return (
     <React.Fragment>
-      <Tooltip
-        title='Add new house'
-        className={styles.addButton}
-        onClick={handleOpen}
-      >
-        <Fab color='secondary'>
-          <AddIcon />
-        </Fab>
-      </Tooltip>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='simple-modal-title'
-        aria-describedby='simple-modal-description'
-      >
-        <Container className={styles.modalContainer}>
-          <form className={styles.form} autoComplete='off'>
-            <div className={styles.item}>
-              <TextField
-                id='standard-basic'
-                label='Title'
-                variant='outlined'
-                size='small'
-                className = {styles.text}
-              />
-            </div>
-            <div className={styles.item}>
-              <TextField
-                id='outlined-multiline-static'
-                label='Description'
-                multiline
-                rows={4}
-                defaultValue='description of your house'
-                variant='outlined'
-                size = 'small'
-                className = {styles.text}
-              />
-            </div>
-            <div>
-              <button type="button" onClick = {() => { showAlert('success', 'nice!!') }}>click</button>
-            </div>
-          </form>
-        </Container>
-      </Modal>
-      <AlertMsg {...alertState}/>
+      <Box className={styles.container}>
+        <Tooltip
+          title='Add new house'
+          className={styles.addButton}
+          onClick={handleOpen}
+        >
+          <Fab color='secondary'>
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+          aria-describedby='simple-modal-description'
+        >
+          <Container className={styles.modalContainer}>
+            <form className={styles.form} autoComplete='off'>
+              <div className={styles.item}>
+                <TextField
+                  id='standard-basic'
+                  label='Title'
+                  variant='outlined'
+                  size='small'
+                  className={styles.text}
+                />
+              </div>
+              <div className={styles.item}>
+                <TextField
+                  id='outlined-multiline-static'
+                  label='Description'
+                  multiline
+                  rows={4}
+                  defaultValue='description of your house'
+                  variant='outlined'
+                  size='small'
+                  className={styles.text}
+                />
+              </div>
+              <div>
+                <button
+                  type='button'
+                  onClick={() => {
+                    showAlert('success', 'nice!!')
+                  }}
+                >
+                  click
+                </button>
+              </div>
+            </form>
+          </Container>
+        </Modal>
+      </Box>
     </React.Fragment>
   )
 }
 
 export default AddNew
+AddNew.propTypes = {
+  currentUser: PropTypes.any,
+  setShowAlert: PropTypes.any,
+}

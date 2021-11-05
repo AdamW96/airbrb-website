@@ -1,38 +1,41 @@
 import React from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@material-ui/lab/Alert'
 import PropTypes from 'prop-types'
 
 export default function AlertMsg (props) {
-  console.log('coming to alert msg', props)
   const [open, setOpen] = React.useState(false)
   React.useEffect(() => {
-    console.log('coming alert effect')
     if (window.showAlert) {
       setOpen(true)
     }
-  })
+  }, [window.showAlert])
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
-    setOpen(false)
     window.showAlert = false
-    console.log('finish show, showalert = false', window.showAlert)
+    setOpen(false)
   }
-  const alertPart = (
-    <Alert onClose={handleClose} severity={`${props.alertType}`} sx={{ width: '100%' }}>
-      {props.alertContent}
-    </Alert>
-  )
+  const alertPart =
+    props.alertType === 'none'
+      ? (<></>)
+      : (
+      <Alert
+        onClose={handleClose}
+        severity={`${props.alertType}`}
+        sx={{ width: '100%' }}
+      >
+        {props.alertContent}
+      </Alert>
+        )
 
-  console.log(alertPart)
   return (
     <React.Fragment>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={open}
-        autoHideDuration={1500}
+        autoHideDuration={3000}
         onClose={handleClose}
         key={'top' + 'center'}
       >
@@ -43,6 +46,6 @@ export default function AlertMsg (props) {
 }
 
 AlertMsg.propTypes = {
-  alertContent: PropTypes.string,
   alertType: PropTypes.string,
+  alertContent: PropTypes.string,
 }

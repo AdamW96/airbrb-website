@@ -1,14 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
-
-import AlertMsg from './AlertMsg'
+import fetchFunc from '../services/fetchService'
 import { Container, Typography, makeStyles } from '@material-ui/core'
 import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'
 import ListIcon from '@material-ui/icons/List'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-
+import PropTypes from 'prop-types'
 const useStyle = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(10),
@@ -53,25 +52,32 @@ const useStyle = makeStyles((theme) => ({
   },
 }))
 
-function Leftbar () {
+function Leftbar (props) {
   const history = useHistory()
-  const [alertState, setAlertState] = React.useState({
-    alertType: 'info',
-    alertContent: 'No data',
-  })
   const styles = useStyle()
-  const currnetUser = localStorage.getItem('user')
+  const { currentUser, setCurrentUser, setShowAlert } = props
+  console.log(props)
   const showAlert = (type, message) => {
     window.showAlert = true
-    setAlertState({ alertType: type, alertContent: message })
+    setShowAlert({ alertType: type, alertContent: message })
   }
+
   const handleLogout = () => {
-    localStorage.removeItem('user')
-    history.push('/')
-    showAlert('success', 'log out successfully')
+    fetchFunc('/user/auth/logout', 'POST').then((response) => {
+      console.log('this is response', response)
+      if (response.status !== 200) {
+        showAlert('error', 'network wrong')
+        return
+      }
+      localStorage.removeItem('user')
+      setCurrentUser(JSON.parse(localStorage.getItem('user')))
+      history.push('/')
+      console.log('finish push')
+      showAlert('success', 'log out successfully')
+    })
   }
+  console.log('current user==>', currentUser)
   return (
-    <React.Fragment>
       <Container className={styles.container}>
         <Link to='/' style={{ textDecoration: 'none', color: '#3f51b5' }}>
           <div className={styles.item}>
@@ -79,7 +85,7 @@ function Leftbar () {
             <Typography className={styles.text}>HomePage</Typography>
           </div>
         </Link>
-        {currnetUser && (
+        {currentUser && (
           <Link to='/' style={{ textDecoration: 'none', color: '#3f51b5' }}>
             <div className={styles.item}>
               <PersonIcon className={styles.icon} />
@@ -88,7 +94,7 @@ function Leftbar () {
           </Link>
         )}
 
-        {currnetUser && (
+        {currentUser && (
           <Link to='/' style={{ textDecoration: 'none', color: '#3f51b5' }}>
             <div className={styles.item}>
               <ListIcon className={styles.icon} />
@@ -97,7 +103,7 @@ function Leftbar () {
           </Link>
         )}
 
-        {!currnetUser && (
+        {!currentUser && (
           <Link
             to='/register'
             style={{ textDecoration: 'none', color: '#3f51b5' }}
@@ -109,7 +115,7 @@ function Leftbar () {
           </Link>
         )}
 
-        {!currnetUser && (
+        {!currentUser && (
           <Link
             to='/login'
             style={{ textDecoration: 'none', color: '#3f51b5' }}
@@ -121,16 +127,19 @@ function Leftbar () {
           </Link>
         )}
 
-        {currnetUser && (
+        {currentUser && (
           <div className={styles.item} onClick = {handleLogout}>
             <ExitToAppIcon className={styles.icon} />
             <Typography className={styles.text}>Logout</Typography>
           </div>
         )}
       </Container>
-      <AlertMsg {...alertState} />
-    </React.Fragment>
   )
 }
 
 export default Leftbar
+Leftbar.propTypes = {
+  currentUser: PropTypes.any,
+  setCurrentUser: PropTypes.any,
+  setShowAlert: PropTypes.any,
+}

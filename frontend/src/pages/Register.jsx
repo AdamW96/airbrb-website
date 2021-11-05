@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useHistory } from 'react-router'
 import fetchFunc from '../services/fetchService'
-import AlertMsg from '../components/AlertMsg'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -11,15 +10,20 @@ import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import LockOutlinedIcon from '@material-ui/icons//LockOutlined'
 import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles'
+// import { createTheme, ThemeProvider } from '@material-ui/core/styles'
+import { Container, makeStyles } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
-const toHomePage = (history) => {
-  history.push('/')
-}
-const toLogin = (history) => {
-  history.push('/login')
-}
+const useStyle = makeStyles((theme) => ({
+  container: {
+    paddingTop: theme.spacing(10)
+  },
+  signup: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  }
+}))
+
 // check validation of input
 const checkValidEmail = (email) => {
   const re =
@@ -35,171 +39,155 @@ const checkValidName = (name) => {
 //   return rePassword.test(password)
 // }
 
-const registerFunction = (email, password, name, showAlert) => {
-  // fetch('http://localhost:5005/user/auth/register', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     email: email,
-  //     password: password,
-  //     name: name,
-  //   }),
-  // })
-
+const registerFunction = (email, password, name, showAlertMsg) => {
   if (!checkValidName(name)) {
-    showAlert('error', 'input valid name')
+    showAlertMsg('error', 'input valid name')
     return
   } else if (!checkValidEmail(email)) {
-    showAlert('error', 'Please input valid email')
+    showAlertMsg('error', 'Please input valid email')
     return
   }
-  // else if (!checkStrongPassword(password)) {
-  //   showAlert('error', 'Please input strong password')
-  //   return
-  // }
   const data = { email, password, name }
   console.log(data)
   fetchFunc('/user/auth/register', 'POST', data).then((response) => {
     if (response.status !== 200) {
-      showAlert('error', 'This email has been used, change a new one')
+      showAlertMsg('error', 'This email has been used, change a new one')
     } else {
-      showAlert('success', 'Register successfully')
+      showAlertMsg('success', 'Register successfully')
     }
   })
 }
 
-const theme = createTheme()
-
-export default function Register () {
+export default function Register (props) {
+  const { setShowAlert } = props
   const history = useHistory()
-  const [alertState, setAlertState] = React.useState({
-    alertType: 'info',
-    alertContent: 'No data',
-  })
+  const styles = useStyle()
 
-  const showAlert = (type, message) => {
-    window.showAlert = true
-    setAlertState({ alertType: type, alertContent: message })
+  const toHomePage = () => {
+    history.push('/')
   }
+  const toLogin = () => {
+    history.push('/login')
+  }
+
+  const showAlertMsg = (type, content) => {
+    window.showAlert = true
+    setShowAlert({ alertType: type, alertContent: content })
+  }
+
   const handleSubmit = (event) => {
     console.log('come to handle submit')
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const name = data.get('firstName') + data.get('lastName')
     console.log(name, data.get('password'))
-    registerFunction(data.get('email'), data.get('password'), name, showAlert)
+    registerFunction(data.get('email'), data.get('password'), name, showAlertMsg)
   }
 
   return (
-    <React.Fragment>
-      <ThemeProvider theme={theme}>
-        <Container component='main' maxWidth='xs'>
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+    <Container className={styles.container} component='main' maxWidth='xs'>
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
+          Sign up
+        </Typography>
+        <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete='given-name'
+                name='firstName'
+                required
+                fullWidth
+                id='firstName'
+                label='First Name'
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id='lastName'
+                label='Last Name'
+                name='lastName'
+                autoComplete='family-name'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id='email'
+                label='Email Address'
+                name='email'
+                autoComplete='email'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name='password'
+                label='Password'
+                type='password'
+                id='password'
+                autoComplete='new-password'
+              />
+            </Grid>
+          </Grid>
+          <br />
+          <Button
+            type='submit'
+            fullWidth
+            variant='contained'
+            color='primary'
+            className = {styles.signup}
+          >
+            Sign Up
+          </Button>
+          <Grid container justifyContent='flex-end'>
+            <Grid item>
+              <Link
+                variant='body2'
+                onClick={toLogin}
+              >
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <br />
+      <Box id='Copyright'>
+        <Typography variant='body2' color='' align='center'>
+          {'Copyright © '}
+          <Link
+            color='inherit'
+            onClick={() => {
+              toHomePage()
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component='h1' variant='h5'>
-              Sign up
-            </Typography>
-            <Box
-              component='form'
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete='given-name'
-                    name='firstName'
-                    required
-                    fullWidth
-                    id='firstName'
-                    label='First Name'
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id='lastName'
-                    label='Last Name'
-                    name='lastName'
-                    autoComplete='family-name'
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id='email'
-                    label='Email Address'
-                    name='email'
-                    autoComplete='email'
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name='password'
-                    label='Password'
-                    type='password'
-                    id='password'
-                    autoComplete='new-password'
-                  />
-                </Grid>
-              </Grid>
-              <br />
-              <Button
-                type='submit'
-                fullWidth
-                variant='contained'
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign Up
-              </Button>
-              <Grid container justifyContent='flex-end'>
-                <Grid item>
-                  <Link
-                    variant='body2'
-                    onClick={() => {
-                      toLogin(history)
-                    }}
-                  >
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-          <br />
-          <Box id='Copyright'>
-            <Typography variant='body2' color='text.secondary' align='center'>
-              {'Copyright © '}
-              <Link color='inherit' onClick={() => {
-                toHomePage(history)
-              }}>
-                Airbnb
-              </Link>
-              {new Date().getFullYear()}
-              {'.'}
-            </Typography>
-          </Box>
-        </Container>
-      </ThemeProvider>
-      <AlertMsg {...alertState} />
-    </React.Fragment>
+            Airbnb
+          </Link>
+          {new Date().getFullYear()}
+          {'.'}
+        </Typography>
+      </Box>
+    </Container>
   )
+}
+
+Register.propTypes = {
+  setShowAlert: PropTypes.any
 }

@@ -11,6 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import MailIcon from '@material-ui/icons/Mail';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { React, useState } from 'react';
+import PropTypes from 'prop-types'
 
 const useStyle = makeStyles((theme) => ({
   toolbar: {
@@ -18,17 +19,8 @@ const useStyle = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
 
-  logoLg: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  logoSm: {
+  logo: {
     display: 'block',
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
   },
   search: {
     display: 'flex',
@@ -68,10 +60,10 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-function Navbar () {
+function Navbar (props) {
   const [open, setOpen] = useState(false);
   const styles = useStyle({ open });
-
+  const { currentUser } = props
   return (
     <div>
       <AppBar position="fixed">
@@ -79,13 +71,11 @@ function Navbar () {
           <Typography variant="h6" className={styles.logoLg}>
             Airbnb
           </Typography>
-          <Typography variant="h6" className={styles.logoSm}>
-            Mobile
-          </Typography>
 
           <div className={styles.search}>
             <SearchIcon />
-            <InputBase placeholder="search..." className={styles.input} />
+            {currentUser && (<InputBase placeholder='search' className={styles.input} />)}
+            {!currentUser && (<InputBase disabled value='You must log in first' className={styles.input} />)}
             <CancelIcon
               className={styles.cancel}
               onClick={() => {
@@ -113,3 +103,8 @@ function Navbar () {
 }
 
 export default Navbar;
+Navbar.propTypes = {
+  currentUser: PropTypes.any,
+  // setCurrentUser: PropTypes.any,
+  // setShowAlert: PropTypes.any,
+}
