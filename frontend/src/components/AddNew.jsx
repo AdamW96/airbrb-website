@@ -43,7 +43,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 function AddNew () {
   const styles = useStyle()
-  const [alertState, setAlertState] = useState({ alertOpen: false, alertType: 'info', alertContent: 'No data' })
+  const [alertState, setAlertState] = useState({ alertType: 'info', alertContent: 'No data' })
   const [open, setOpen] = useState(false)
   console.log(alertState)
   const handleOpen = () => {
@@ -55,8 +55,7 @@ function AddNew () {
 
   const showAlert = (type, message) => {
     window.showAlert = true
-    console.log(window.showAlert)
-    setAlertState({ alertOpen: window.showAlert, alertType: type, alertContent: message })
+    setAlertState({ alertType: type, alertContent: message })
   }
   return (
     <React.Fragment>

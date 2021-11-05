@@ -10,13 +10,19 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 import imgURL from '../images/house1.jpg'
+// import fetchFunc from '../services/fetchService'
 
 const useStyle = makeStyles((theme) => ({
   cardContainer: {
     marginBottom: theme.spacing(4)
   },
 }))
-function Post () {
+
+// const lists = () => {
+//   fetchFunc()
+// }
+
+function HomeLists () {
   const styles = useStyle()
   return (
     <Card className={styles.cardContainer}>
@@ -46,4 +52,4 @@ function Post () {
   )
 }
 
-export default Post
+export default HomeLists

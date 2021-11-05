@@ -5,9 +5,9 @@ import PropTypes from 'prop-types'
 
 export default function AlertMsg (props) {
   console.log('coming to alert msg', props)
-  const [open, setOpen] = React.useState()
+  const [open, setOpen] = React.useState(false)
   React.useEffect(() => {
-    console.log('coming ti effect')
+    console.log('coming alert effect')
     if (window.showAlert) {
       setOpen(true)
     }
@@ -32,7 +32,7 @@ export default function AlertMsg (props) {
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={open}
-        autoHideDuration={2000}
+        autoHideDuration={1500}
         onClose={handleClose}
         key={'top' + 'center'}
       >
@@ -43,7 +43,6 @@ export default function AlertMsg (props) {
 }
 
 AlertMsg.propTypes = {
-  alertOpen: PropTypes.bool,
   alertContent: PropTypes.string,
   alertType: PropTypes.string,
 }
