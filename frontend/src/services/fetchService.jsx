@@ -1,4 +1,4 @@
-import BACKEND_URL from './config'
+import { BACKEND_URL } from './config'
 
 function fetchFunc (url, method, data = null) {
   const fullUrl = BACKEND_URL + url

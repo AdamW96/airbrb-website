@@ -182,7 +182,6 @@ export const addListing = (title, email, address, price, thumbnail, metadata) =>
     } else {
       const id = newListingId();
       listings[id] = newListingPayload(title, email, address, price, thumbnail, metadata);
-
       resolve(id);
     }
   });

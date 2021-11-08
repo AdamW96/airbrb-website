@@ -4,12 +4,17 @@ import Alert from '@material-ui/lab/Alert'
 import PropTypes from 'prop-types'
 
 export default function AlertMsg (props) {
+  const { alertType, alertContent } = props
   const [open, setOpen] = React.useState(false)
   React.useEffect(() => {
-    if (window.showAlert) {
+    // if (window.showAlert === true) {
+    //   setOpen(true)
+    // }
+    if (alertType !== 'none') {
       setOpen(true)
     }
-  }, [window.showAlert])
+  }, [props])
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return
@@ -18,17 +23,17 @@ export default function AlertMsg (props) {
     setOpen(false)
   }
   const alertPart =
-    props.alertType === 'none'
-      ? (<></>)
-      : (
-      <Alert
-        onClose={handleClose}
-        severity={`${props.alertType}`}
-        sx={{ width: '100%' }}
-      >
-        {props.alertContent}
-      </Alert>
+    (alertType && alertType !== 'none')
+      ? (
+        <Alert
+          onClose={handleClose}
+          severity={`${alertType}`}
+          sx={{ width: '100%' }}
+        >
+          {alertContent}
+        </Alert>
         )
+      : (<></>)
 
   return (
     <React.Fragment>

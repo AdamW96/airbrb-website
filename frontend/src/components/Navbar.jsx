@@ -1,3 +1,6 @@
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import fetchFunc from '../services/fetchService'
 import {
   AppBar,
   Toolbar,
@@ -5,12 +8,15 @@ import {
   Typography,
   InputBase,
   alpha,
-  Badge,
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import MailIcon from '@material-ui/icons/Mail';
-import CancelIcon from '@material-ui/icons/Cancel';
-import { React, useState } from 'react';
+  Menu,
+  MenuItem,
+} from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+import CancelIcon from '@material-ui/icons/Cancel'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import IconButton from '@material-ui/core/IconButton'
+import LockOpenIcon from '@material-ui/icons/LockOpen'
+
 import PropTypes from 'prop-types'
 
 const useStyle = makeStyles((theme) => ({
@@ -21,6 +27,9 @@ const useStyle = makeStyles((theme) => ({
 
   logo: {
     display: 'block',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   search: {
     display: 'flex',
@@ -32,7 +41,7 @@ const useStyle = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
     width: '30%',
     [theme.breakpoints.down('sm')]: {
-      display: (props) => (props.open ? 'flex' : 'none'),
+      display: (props) => (props.openSearch ? 'flex' : 'none'),
       width: '60%',
     },
   },
@@ -46,7 +55,7 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   icons: {
-    display: (props) => (props.open ? 'none' : 'flex'),
+    display: (props) => (props.openSearch ? 'none' : 'flex'),
     alignItems: 'center',
   },
   badge: {
@@ -58,53 +67,201 @@ const useStyle = makeStyles((theme) => ({
       display: 'none',
     },
   },
-}));
+  profile: {
+    alignItems: 'center',
+  },
+  buttons: {
+    alignItems: 'center',
+  },
+}))
 
 function Navbar (props) {
-  const [open, setOpen] = useState(false);
-  const styles = useStyle({ open });
-  const { currentUser } = props
+  const [openSearch, setOpenSearch] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [signAnchorEL, setSignAnchorEL] = useState(null)
+  const styles = useStyle({ openSearch })
+  const history = useHistory()
+
+  const { currentUser, setCurrentUser, setShowAlert } = props
+  const isMenuOpen = Boolean(anchorEl)
+  const isSignOpen = Boolean(signAnchorEL)
+
+  const toHomePage = () => {
+    history.push('/')
+  }
+
+  const toRegister = () => {
+    history.push('/register')
+  }
+
+  const toLogin = () => {
+    history.push('/login')
+  }
+
+  const toCreate = () => {
+    history.push('/create')
+  }
+
+  const showAlertMsg = (type, message) => {
+    window.showAlert = true
+    setShowAlert({ alertType: type, alertContent: message })
+  }
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleSignOpen = (event) => {
+    setSignAnchorEL(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+    setSignAnchorEL(null)
+  }
+
+  const handleLogout = () => {
+    fetchFunc('/user/auth/logout', 'POST').then((response) => {
+      console.log('this is response', response)
+      if (response.status !== 200) {
+        showAlertMsg('error', 'network wrong')
+        return
+      }
+      localStorage.removeItem('user')
+      setCurrentUser(JSON.parse(localStorage.getItem('user')))
+      history.push('/')
+      console.log('finish push')
+      showAlertMsg('success', 'log out successfully')
+    })
+  }
+
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={'account-menu'}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>
+        <Typography onClick={toCreate}>Create new list</Typography>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Typography >Hosted lists</Typography>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Typography >Book lists</Typography>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Typography >Messages</Typography>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Typography onClick={handleLogout}>Logout</Typography>
+      </MenuItem>
+    </Menu>
+  )
+
+  const renderSign = (
+    <Menu
+      anchorEl={signAnchorEL}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={'sign-menu'}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isSignOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>
+        <Typography onClick={toRegister}>
+          Register
+        </Typography>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Typography onClick={toLogin}>
+          Login
+        </Typography>
+      </MenuItem>
+    </Menu>
+  )
+
   return (
     <div>
-      <AppBar position="fixed">
+      <AppBar position='fixed'>
         <Toolbar className={styles.toolbar}>
-          <Typography variant="h6" className={styles.logoLg}>
+          <Typography variant='h6' className={styles.logo} onClick={toHomePage}>
             Airbnb
           </Typography>
 
           <div className={styles.search}>
             <SearchIcon />
-            {currentUser && (<InputBase placeholder='search' className={styles.input} />)}
-            {!currentUser && (<InputBase disabled value='You must log in first' className={styles.input} />)}
+            {currentUser && (
+              <InputBase placeholder='search' className={styles.input} />
+            )}
+            {!currentUser && (
+              <InputBase
+                disabled
+                value='You must log in first'
+                className={styles.input}
+              />
+            )}
             <CancelIcon
               className={styles.cancel}
               onClick={() => {
-                setOpen(false);
+                setOpenSearch(false)
               }}
             />
           </div>
           <div className={styles.icons}>
-            <Badge
+            <IconButton
               className={styles.searchButton}
               onClick={() => {
-                setOpen(true);
+                setOpenSearch(true)
               }}
             >
               <SearchIcon />
-            </Badge>
-            <Badge variant="dot" color="secondary" className={styles.badge}>
-              <MailIcon />
-            </Badge>
+            </IconButton>
+            {currentUser && (
+              <div className={styles.profile}>
+                <IconButton
+                  edge='end'
+                  aria-label='account of current user'
+                  aria-controls={'account-menu'}
+                  aria-haspopup='true'
+                  onClick={handleProfileMenuOpen}
+                  color='inherit'
+                >
+                  <AccountCircle fontSize='large' />
+                </IconButton>
+              </div>
+            )}
+            {!currentUser && (
+              <div className={styles.buttons}>
+                <IconButton
+                  edge='end'
+                  aria-label='register and log in'
+                  aria-controls={'sign-menu'}
+                  aria-haspopup='true'
+                  onClick={handleSignOpen}
+                  color='inherit'
+                >
+                  <LockOpenIcon fontSize='large' />
+                </IconButton>
+              </div>
+            )}
           </div>
         </Toolbar>
       </AppBar>
+      {renderMenu}
+      {renderSign}
     </div>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar
 Navbar.propTypes = {
   currentUser: PropTypes.any,
-  // setCurrentUser: PropTypes.any,
-  // setShowAlert: PropTypes.any,
+  setCurrentUser: PropTypes.any,
+  setShowAlert: PropTypes.any,
 }

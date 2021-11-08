@@ -18,7 +18,7 @@ const useStyle = makeStyles((theme) => ({
     paddingTop: theme.spacing(10),
   },
   link: {
-    '&hover': {
+    '&:hover': {
       cursor: 'pointer',
     },
   },
@@ -134,9 +134,9 @@ function Login (props) {
       </Box>
       <br />
       <Box id='copyright'>
-        <Typography variant='body2' color='text.secondary' align='center'>
+        <Typography variant='body2' align='center'>
           {'Copyright © '}
-          <Link color='inherit' onClick={goHomePage}>
+          <Link color='inherit' onClick={goHomePage} className={styles.link}>
             Airbnb
           </Link>
           {new Date().getFullYear()}

@@ -16,12 +16,17 @@ import PropTypes from 'prop-types'
 
 const useStyle = makeStyles((theme) => ({
   container: {
-    paddingTop: theme.spacing(10)
+    paddingTop: theme.spacing(10),
   },
   signup: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-  }
+  },
+  link: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 }))
 
 // check validation of input
@@ -81,7 +86,12 @@ export default function Register (props) {
     const data = new FormData(event.currentTarget)
     const name = data.get('firstName') + data.get('lastName')
     console.log(name, data.get('password'))
-    registerFunction(data.get('email'), data.get('password'), name, showAlertMsg)
+    registerFunction(
+      data.get('email'),
+      data.get('password'),
+      name,
+      showAlertMsg
+    )
   }
 
   return (
@@ -152,16 +162,13 @@ export default function Register (props) {
             fullWidth
             variant='contained'
             color='primary'
-            className = {styles.signup}
+            className={styles.signup}
           >
             Sign Up
           </Button>
           <Grid container justifyContent='flex-end'>
             <Grid item>
-              <Link
-                variant='body2'
-                onClick={toLogin}
-              >
+              <Link variant='body2' onClick={toLogin} className={styles.link}>
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -172,12 +179,7 @@ export default function Register (props) {
       <Box id='Copyright'>
         <Typography variant='body2' color='' align='center'>
           {'Copyright © '}
-          <Link
-            color='inherit'
-            onClick={() => {
-              toHomePage()
-            }}
-          >
+          <Link color='inherit' onClick={toHomePage} className={styles.link}>
             Airbnb
           </Link>
           {new Date().getFullYear()}
@@ -189,5 +191,5 @@ export default function Register (props) {
 }
 
 Register.propTypes = {
-  setShowAlert: PropTypes.any
+  setShowAlert: PropTypes.any,
 }
