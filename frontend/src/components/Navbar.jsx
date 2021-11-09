@@ -10,15 +10,42 @@ import {
   alpha,
   Menu,
   MenuItem,
+  Divider,
+  Slider,
+  Grid,
+  Button,
+  Modal,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import CancelIcon from '@material-ui/icons/Cancel'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import IconButton from '@material-ui/core/IconButton'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
+import LocationCityIcon from '@material-ui/icons/LocationCity';
+import TocIcon from '@material-ui/icons/Toc';
 
 import PropTypes from 'prop-types'
 
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+
+function rand () {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle () {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 const useStyle = makeStyles((theme) => ({
   toolbar: {
     display: 'flex',
@@ -72,6 +99,14 @@ const useStyle = makeStyles((theme) => ({
   },
   buttons: {
     alignItems: 'center',
+  },
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
 }))
 
@@ -192,6 +227,119 @@ function Navbar (props) {
     </Menu>
   )
 
+  const [modalStyle] = React.useState(getModalStyle);
+  const [openModel, setOpenAdvancedSearchModel] = React.useState(false);
+  const handleAdvancedSearchOpen = () => {
+    setOpenAdvancedSearchModel(true);
+  };
+  const handleAdvancedSearchClose = () => {
+    setOpenAdvancedSearchModel(false);
+  };
+  const [valueNumBed, setValueNumBed] = React.useState([1, 3]);
+  const handleChangeNumBed = (event, newValue) => {
+    setValueNumBed(newValue);
+  };
+  const [valuePrice, setValuePrice] = React.useState([0, 100]);
+  const handleChangePrice = (event, newValue) => {
+    setValuePrice(newValue);
+  };
+  // 这里获取值哦。所以需要针对不同的numberbed还是price来修改
+  function valuetext (value) {
+    return `${value}`;
+  }
+  const [valueDate, setValueDate] = React.useState(new Date('2021-08-18T21:11:54'));
+  const handleChangeDate = (newValue) => {
+    setValueDate(newValue);
+  };
+  const body = (
+    <div style={modalStyle} className={styles.paper}>
+      <h3 id="simple-modal-title">Advanced Search</h3>
+      <Typography id="discrete-slider" gutterBottom>
+      Number of bedrooms:
+      </Typography>
+      <Slider
+        value={valueNumBed}
+        onChange={handleChangeNumBed}
+        valueLabelDisplay="auto"
+        aria-labelledby="range-slider"
+        // 这里获取值哦
+        getAriaValueText={valuetext}
+        min={1}
+        max={10}
+        step={1}
+      />
+      <Typography id="discrete-slider" gutterBottom>
+        Date range:
+      </Typography>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <KeyboardDatePicker
+        disableToolbar
+        variant="inline"
+        format="MM/dd/yyyy"
+        margin="normal"
+        id="date-picker-inline"
+        label="Start time"
+        value={valueDate}
+        onChange={handleChangeDate}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
+      />
+      <KeyboardDatePicker
+        disableToolbar
+        variant="inline"
+        format="MM/dd/yyyy"
+        margin="normal"
+        id="date-picker-inline"
+        label="End time"
+        value={valueDate}
+        onChange={handleChangeDate}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
+      />
+      </MuiPickersUtilsProvider>
+
+      <Typography id="discrete-slider" gutterBottom>
+        Price:
+      </Typography>
+      <Slider
+        value={valuePrice}
+        onChange={handleChangePrice}
+        valueLabelDisplay="auto"
+        aria-labelledby="range-slider"
+        // 这里获取值哦
+        getAriaValueText={valuetext}
+        min={0}
+        max={1000}
+        step={50}
+      />
+      <Typography id="discrete-slider" gutterBottom>
+        Review ratings:这里的表达形式是怎么样的？
+      </Typography>
+      <br />
+      <Grid container justify="center">
+          <Button
+          variant="contained"
+          color="primary"
+          size='medium'
+          style= {{ maxWidth: '90px', maxHeight: '40px', minWidth: '90px', minHeight: '40px' }}
+          >
+            Search
+          </Button>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <Button
+          variant="contained"
+          color="primary"
+          size='medium'
+          style= {{ maxWidth: '90px', maxHeight: '40px', minWidth: '90px', minHeight: '40px' }}
+          onClick={handleAdvancedSearchClose}>
+            Close
+          </Button>
+        </Grid>
+    </div>
+  );
+
   return (
     <div>
       <AppBar position='fixed'>
@@ -200,25 +348,47 @@ function Navbar (props) {
             Airbnb
           </Typography>
 
+          {/* 这里是search部分 */}
           <div className={styles.search}>
-            <SearchIcon />
             {currentUser && (
-              <InputBase placeholder='search' className={styles.input} />
+                <>
+                <LocationCityIcon />
+                <InputBase placeholder="City" className={styles.input} />
+                <Divider orientation="vertical" flexItem />
+                <TocIcon />
+                <InputBase placeholder="Title" className={styles.input} />
+                <SearchIcon />
+                </>
             )}
             {!currentUser && (
-              <InputBase
-                disabled
-                value='You must log in first'
-                className={styles.input}
-              />
+              <>
+                <LocationCityIcon />
+                <InputBase placeholder="Please login" className={styles.input} disabled />
+                <Divider orientation="vertical" flexItem />
+                <TocIcon />
+                <InputBase placeholder="Please login" className={styles.input} disabled />
+                <SearchIcon />
+              </>
             )}
             <CancelIcon
-              className={styles.cancel}
-              onClick={() => {
-                setOpenSearch(false)
-              }}
+            className={styles.cancel}
+            onClick={() => {
+              setOpenSearch(false);
+            }}
             />
           </div>
+            <Button variant="contained" color="primary" onClick={handleAdvancedSearchOpen}>
+              Advanced Search
+            </Button>
+            <Modal
+              open={openModel}
+              onClose={handleAdvancedSearchClose}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+            >
+              {body}
+            </Modal>
+          {/* 这里是search部分 */}
           <div className={styles.icons}>
             <IconButton
               className={styles.searchButton}
