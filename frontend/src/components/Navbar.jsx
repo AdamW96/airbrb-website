@@ -102,6 +102,10 @@ function Navbar (props) {
     history.push('/create')
   }
 
+  const toHosted = () => {
+    history.push('/hosted')
+  }
+
   const showAlertMsg = (type, message) => {
     window.showAlert = true
     setShowAlert({ alertType: type, alertContent: message })
@@ -127,11 +131,10 @@ function Navbar (props) {
         showAlertMsg('error', 'network wrong')
         return
       }
+      showAlertMsg('success', 'log out successfully')
       localStorage.removeItem('user')
       setCurrentUser(JSON.parse(localStorage.getItem('user')))
       history.push('/')
-      console.log('finish push')
-      showAlertMsg('success', 'log out successfully')
     })
   }
 
@@ -149,13 +152,16 @@ function Navbar (props) {
         <Typography onClick={toCreate}>Create new list</Typography>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Typography >Hosted lists</Typography>
+        <Typography onClick={toHosted}>Hosted lists</Typography>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
         <Typography >Book lists</Typography>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
         <Typography >Messages</Typography>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Typography >My profit</Typography>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
         <Typography onClick={handleLogout}>Logout</Typography>

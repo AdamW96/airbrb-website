@@ -1,7 +1,8 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom'
 import { initData } from '../services/config'
 import fetchFunc from '../services/fetchService'
+import { fileToDataUrl } from '../services/sendImage'
 import Box from '@material-ui/core/Box'
 // import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid'
@@ -11,6 +12,14 @@ import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import Paper from '@material-ui/core/Paper'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import InputLabel from '@material-ui/core/InputLabel'
+import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import PoolIcon from '@material-ui/icons/Pool'
@@ -20,7 +29,8 @@ import AcUnitIcon from '@material-ui/icons/AcUnit'
 import WifiIcon from '@material-ui/icons/Wifi'
 import TvIcon from '@material-ui/icons/Tv'
 import KitchenIcon from '@material-ui/icons/Kitchen'
-import HotTubIcon from '@material-ui/icons/HotTub';
+import HotTubIcon from '@material-ui/icons/HotTub'
+import DeleteIcon from '@material-ui/icons/Delete'
 import PropTypes from 'prop-types'
 
 const useStyles = makeStyles((theme) => ({
@@ -50,6 +60,13 @@ const useStyles = makeStyles((theme) => ({
   nextButton: {
     marginLeft: 5,
   },
+
+  bedroomsList: {
+    paddingLeft: theme.spacing(3),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listTitle: { width: 'auto' },
   choosedButton: {
     borderRadius: 5,
     // border: '2px black solid',
@@ -66,25 +83,23 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid #b5b5b5',
   },
   amenitiesIcon: {
-    padding: theme.spacing(5),
+    padding: theme.spacing(2),
+  },
+  input: {
+    display: 'none',
   },
 }))
 
 export default function Create (props) {
-  // const initData = { title: '', address: {}, price: 0, thumbnail: '', metadata: {} }
   const styles = useStyles()
-  const history = useHistory();
+  const history = useHistory()
   const [pageState, setPageState] = React.useState(1)
   const [dataState, setdataState] = React.useState(initData)
+  // const [bedrooms, setBedrooms] = React.useState([])
+  const [thumbnailType, setThumbnailType] = React.useState('image')
+  const [Inputimage, setInputImage] = React.useState([])
+  const [youtubeURL, setYoutubeURL] = React.useState('')
   const { setShowAlert } = props
-  React.useEffect(() => {
-    setPageState(1)
-    console.log(dataState)
-  }, [])
-
-  React.useEffect(() => {
-    console.log(dataState)
-  }, [dataState])
 
   const showAlertMsg = (type, message) => {
     setShowAlert({ alertType: type, alertContent: message })
@@ -113,6 +128,10 @@ export default function Create (props) {
       showAlertMsg('error', 'You must fill all information!')
       return false
     }
+    if (!/^\d+$/.test(dataState.address.postcode)) {
+      showAlertMsg('error', 'You must enter positive number in postcode')
+      return false
+    }
     return true
   }
 
@@ -120,12 +139,30 @@ export default function Create (props) {
     if (
       dataState.title.replace(' ', '').length === 0 ||
       dataState.price.replace(' ', '').length === 0 ||
-      dataState.metadata.bedsNumber.replace(' ', '').length === 0 ||
-      dataState.metadata.bedRoomNumber.replace(' ', '').length === 0 ||
       dataState.metadata.bathRoomNumber.replace(' ', '').length === 0
     ) {
       showAlertMsg('error', 'You must fill all information!')
       return false
+    }
+    if (!/^\d+$/.test(dataState.metadata.bathRoomNumber)) {
+      showAlertMsg('error', 'You must enter positive number in bathrooms')
+      return false
+    }
+    if (!/^\d+$/.test(dataState.price)) {
+      showAlertMsg('error', 'You must enter positive number in price per night')
+      return false
+    }
+    if (dataState.metadata.bedRooms.length > 0) {
+      for (let i = 0; i < dataState.metadata.bedRooms.length; i++) {
+        if (dataState.metadata.bedRooms[i].bedsNumber.length === 0 || dataState.metadata.bedRooms[i].size.length === 0) {
+          showAlertMsg('error', 'You must finish all empty bedroom or remove it !')
+          return false
+        }
+        if (!/^[0-9]*[1-9][0-9]*$/.test(dataState.metadata.bedRooms[i].bedsNumber)) {
+          showAlertMsg('error', 'You must enter positive number in number of beds')
+          return false
+        }
+      }
     }
     return true
   }
@@ -137,6 +174,8 @@ export default function Create (props) {
       return checkSecondValidation()
     } else if (pageState === 3) {
       return checkThirdValidation()
+    } else if (pageState === 4) {
+      return true
     }
   }
 
@@ -155,16 +194,19 @@ export default function Create (props) {
     console.log(e.currentTarget)
     if (e.currentTarget.name === 'entirePlace') {
       if (newData.metadata.privateRoom || newData.metadata.shareRoom) {
+        showAlertMsg('info', 'You can only choose one type')
         return
       }
       newData.metadata.entirePlace = !newData.metadata.entirePlace
     } else if (e.currentTarget.name === 'privateRoom') {
       if (newData.metadata.entirePlace || newData.metadata.shareRoom) {
+        showAlertMsg('info', 'You can only choose one type')
         return
       }
       newData.metadata.privateRoom = !newData.metadata.privateRoom
     } else if (e.currentTarget.name === 'shareRoom') {
       if (newData.metadata.entirePlace || newData.metadata.privateRoom) {
+        showAlertMsg('info', 'You can only choose one type')
         return
       }
       newData.metadata.shareRoom = !newData.metadata.shareRoom
@@ -227,16 +269,163 @@ export default function Create (props) {
     setdataState(newData)
   }
 
+  const handleAddNewRoom = () => {
+    const newData = { ...dataState }
+    if (newData.metadata.bedRooms.length >= 50) {
+      showAlertMsg('error', 'You can\'t add more bedroom, maximum number is 50')
+      return
+    }
+    const newRoom = { bedsNumber: '', size: '' }
+    newData.metadata.bedRooms.push(newRoom)
+    setdataState(newData)
+  }
+
+  const handleChangeBeds = (e) => {
+    const newData = { ...dataState }
+    const type = e.target.name.split('#')[0]
+    const index = e.target.name.split('#')[1]
+    if (type === 'bedsNumber') {
+      newData.metadata.bedRooms[index].bedsNumber = e.target.value
+    } else if (type === 'size') {
+      newData.metadata.bedRooms[index].size = e.target.value
+    }
+    setdataState(newData)
+  }
+
+  const removeRoom = (e) => {
+    const newData = { ...dataState }
+    console.log(e.currentTarget)
+    const index = e.currentTarget.name.split('#')[1]
+    newData.metadata.bedRooms.splice(index, 1)
+    console.log(newData)
+    setdataState(newData)
+  }
+
+  const createOneRoom = (index) => {
+    console.log(dataState.metadata.bedRooms[index].bedsNumber)
+    return (
+      <Grid container spacing={3} className={styles.bedroomsList} key={index}>
+        <Grid item textAlign='right' xs={3} className={styles.listItem}>
+          <Typography className={styles.listTitle}>{`Room ${index + 1}`}</Typography>
+        </Grid>
+        <Grid item textAlign='center' xs={3}>
+          <TextField
+            fullWidth
+            label='Number of beds'
+            name={`bedsNumber#${index}`}
+            type='number'
+            placeholder='Enter number of beds in this room'
+            value={dataState.metadata.bedRooms[index].bedsNumber}
+            onChange={(e) => {
+              handleChangeBeds(e)
+            }}
+            InputProps={{
+              inputProps: {
+                max: 50, min: 0
+              }
+            }}
+          />
+        </Grid>
+        <Grid item textAlign='center' xs={3}>
+          <FormControl fullWidth>
+            <InputLabel id='select-label'>Bed size</InputLabel>
+            <Select
+              labelId='select-label'
+              id='select'
+              name = {`size#${index}`}
+              value={dataState.metadata.bedRooms[index].size}
+              onChange={(e) => {
+                handleChangeBeds(e)
+              }}
+            >
+              <MenuItem value={'single'}>Single</MenuItem>
+              <MenuItem value={'double'}>Double</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item textAlign='left' xs={3}>
+          <IconButton name={`delete#${index}`} onClick = {(e) => {
+            removeRoom(e)
+          }}>
+            <DeleteIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+    )
+  }
+
+  const handleChangeFile = (e) => {
+    setThumbnailType(e.target.value)
+  }
+
+  const handleChangeURL = (e) => {
+    setYoutubeURL(e.target.value)
+  }
+
+  const handleInputFile = (e) => {
+    setInputImage(e.target.files)
+  }
+
   const handleSubmit = () => {
-    fetchFunc('/listings/new', 'POST', dataState).then((response) => {
-      if (response.status !== 200) {
-        showAlertMsg('error', 'invalid submit')
+    if (thumbnailType === 'image') {
+      if (Inputimage.length === 0 || Inputimage.length > 3) {
+        showAlertMsg('error', 'You must upload right number of images')
         return
       }
-      showAlertMsg('success', 'create new list successfully')
-      history.push('/')
-    })
+      let thumbnailStr = ''
+      for (let i = 0; i < Inputimage.length; i++) {
+        fileToDataUrl(Inputimage[i]).then((res) => {
+          thumbnailStr += `${res} `
+          if (i === Inputimage.length - 1) {
+            const data = { ...dataState }
+            data.thumbnail = thumbnailStr
+            fetchFunc('/listings/new', 'POST', data).then((response) => {
+              if (response.status !== 200) {
+                showAlertMsg('error', 'invalid submit')
+                return
+              }
+              setdataState({ ...initData })
+              showAlertMsg('success', 'create new list successfully')
+              history.push('/hosted')
+            }).catch((err) => {
+              console.log(err)
+              showAlertMsg('error', 'can not connect server')
+            })
+          }
+        })
+      }
+    } else if (thumbnailType === 'video') {
+      const data = { ...dataState }
+      if (youtubeURL.length === 0) {
+        showAlertMsg('error', 'You must enter a youtube URL')
+        return
+      }
+      data.thumbnail = youtubeURL
+      fetchFunc('/listings/new', 'POST', data).then((response) => {
+        if (response.status !== 200) {
+          showAlertMsg('error', 'invalid submit')
+          return
+        }
+        showAlertMsg('success', 'create new list successfully')
+        history.push('/hosted')
+        setdataState({ ...initData })
+      }).catch((err) => {
+        console.log(err)
+        showAlertMsg('error', 'can not connect server')
+      })
+    }
   }
+
+  const filesContent = (function () {
+    if (Inputimage.length === 0) return <Typography> No file </Typography>
+    else {
+      let fileStr = ''
+      for (let i = 0; i < Inputimage.length; i++) {
+        fileStr += ` ${Inputimage[i].name}`
+      }
+      return <Typography> Files are{fileStr} </Typography>
+    }
+  })()
 
   const formContent = (function () {
     if (pageState === 1) {
@@ -293,7 +482,7 @@ export default function Create (props) {
         <Box name='secondForm' className={styles.formBox}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>Street:</Typography>
+              <Typography variant='h6'>Street:</Typography>
               <TextField
                 fullWidth
                 // label='Street'
@@ -306,7 +495,7 @@ export default function Create (props) {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>City:</Typography>
+              <Typography variant='h6'>City:</Typography>
               <TextField
                 fullWidth
                 // label='City'
@@ -320,7 +509,7 @@ export default function Create (props) {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>State:</Typography>
+              <Typography variant='h6'>State:</Typography>
               <TextField
                 fullWidth
                 // label='State'
@@ -333,7 +522,7 @@ export default function Create (props) {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>Postcode:</Typography>
+              <Typography variant='h6'>Postcode:</Typography>
               <TextField
                 fullWidth
                 // label='Postcode'
@@ -343,10 +532,15 @@ export default function Create (props) {
                 helperText='Enter the postcode number'
                 value={dataState.address.postcode}
                 onChange={handleChangeAddress}
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>Country:</Typography>
+              <Typography variant='h6'>Country:</Typography>
               <TextField
                 fullWidth
                 placeholder='Input Country'
@@ -366,7 +560,7 @@ export default function Create (props) {
         <Box name='thirdForm' className={styles.formBox}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>House title:</Typography>
+              <Typography variant='h6'>House title:</Typography>
               <TextField
                 fullWidth
                 name='title'
@@ -377,16 +571,19 @@ export default function Create (props) {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>Price per day:</Typography>
+              <Typography variant='h6'>Price per night:</Typography>
               <TextField
-                // label='Price per day'
+                // label='Price per night'
                 fullWidth
                 name='price'
                 type='number'
-                placeholder='Input price per day'
+                placeholder='Input price per night'
                 value={dataState.price}
                 onChange={handleChangeRooms}
                 InputProps={{
+                  inputProps: {
+                    min: 0
+                  },
                   startAdornment: (
                     <InputAdornment position='start'>
                       <AttachMoneyIcon />
@@ -395,33 +592,8 @@ export default function Create (props) {
                 }}
               />
             </Grid>
-
             <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>Beds:</Typography>
-              <TextField
-                fullWidth
-                // label='Beds'
-                name='beds'
-                type='number'
-                placeholder='Input number of beds'
-                value={dataState.metadata.bedsNumber}
-                onChange={handleChangeRooms}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>Bedrooms:</Typography>
-              <TextField
-                fullWidth
-                placeholder='Input number of bedroom'
-                // label='Bedroom'
-                name='bedroom'
-                type='number'
-                value={dataState.metadata.bedRoomNumber}
-                onChange={handleChangeRooms}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant='h7'>Bathrooms:</Typography>
+              <Typography variant='h6'>Bathrooms:</Typography>
               <TextField
                 fullWidth
                 placeholder='Input number of bathroom'
@@ -430,7 +602,31 @@ export default function Create (props) {
                 type='number'
                 value={dataState.metadata.bathRoomNumber}
                 onChange={handleChangeRooms}
+                InputProps={{
+                  inputProps: {
+                    max: 50, min: 0
+                  }
+                }}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={3}>
+                <Grid item xs={6}>
+                  <Typography variant='h6'>Bedrooms:</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={handleAddNewRoom}
+                  >
+                    Add New Room
+                  </Button>
+                </Grid>
+                {dataState.metadata.bedRooms.map((ele, index) => {
+                  return createOneRoom(index)
+                })}
+              </Grid>
             </Grid>
           </Grid>
         </Box>
@@ -582,6 +778,78 @@ export default function Create (props) {
           </Box>
         </React.Fragment>
       )
+    } else if (pageState === 5) {
+      return (
+        <React.Fragment>
+          <Typography variant='h5' align='center' className={styles.subtitle}>
+            Upload image or video
+          </Typography>
+          <Box name='fifthForm' className={styles.formBox}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6} align='center'>
+                <Typography>Thumbnail</Typography>
+                <FormControl component='fieldset'>
+                  <RadioGroup
+                    aria-label='thumbnail'
+                    name='thumbnail'
+                    value={thumbnailType}
+                    onChange={handleChangeFile}
+                  >
+                    <FormControlLabel
+                      value='image'
+                      control={<Radio />}
+                      label='image'
+                    />
+                    <FormControlLabel
+                      value='video'
+                      control={<Radio />}
+                      label='video'
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6} align='center'>
+                {thumbnailType === 'image' && (
+                  <Box>
+                    <input
+                      accept='image/jpeg,image/png,image/jpg'
+                      className={styles.input}
+                      id='upload-file'
+                      multiple
+                      type='file'
+                      onChange={handleInputFile}
+                    />
+                    <Typography className={styles.uploadTitle}>
+                      Upload at most 3 images (jpeg, png, jpg)
+                    </Typography>
+                    <label htmlFor='upload-file'>
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        component='span'
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                    {filesContent}
+                  </Box>
+                )}
+                {thumbnailType === 'video' && (
+                  <TextField
+                    fullWidth
+                    label='Youtube URL'
+                    name='youtube'
+                    type='text'
+                    placeholder='Input youtube url'
+                    value={youtubeURL}
+                    onChange={handleChangeURL}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          </Box>
+        </React.Fragment>
+      )
     }
   })()
 
@@ -606,7 +874,7 @@ export default function Create (props) {
                 Back
               </Button>
             )}
-            {pageState !== 4 && (
+            {pageState !== 5 && (
               <Button
                 variant='contained'
                 color='primary'
@@ -616,7 +884,7 @@ export default function Create (props) {
                 Next
               </Button>
             )}
-            {pageState === 4 && (
+            {pageState === 5 && (
               <Button
                 variant='contained'
                 color='primary'

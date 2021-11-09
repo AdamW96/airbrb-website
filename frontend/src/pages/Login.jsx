@@ -38,6 +38,7 @@ const loginFunction = (email, password, showAlert, goHomePage, setCurrentUser) =
       console.log(data)
       localStorage.setItem('user', JSON.stringify(data))
       setCurrentUser(JSON.parse(localStorage.getItem('user')))
+      showAlert('success', 'Log in successfully')
       goHomePage()
     })
   })
@@ -57,7 +58,6 @@ function Login (props) {
   }
 
   const showAlert = (type, message) => {
-    window.showAlert = true
     setShowAlert({ alertType: type, alertContent: message })
   }
 

@@ -4,15 +4,15 @@ import Home from './pages/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Create from './pages/Create'
+import Hosted from './pages/Hosted'
 import Navbar from './components/Navbar'
 import AlertMsg from './components/AlertMsg'
+
 // import Leftbar from './components/Leftbar'
 // import Rightbar from './components/Rightbar'
 // import AddNew from './components/AddNew'
 
 // inital global part
-window.showAlert = false
-window.count = 0
 function App () {
   const [currentUser, setCurrentUser] = React.useState(
     JSON.parse(localStorage.getItem('user'))
@@ -52,6 +52,13 @@ function App () {
         </Route>
         <Route path='/create' exact>
           <Create
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            setShowAlert={setShowAlert}
+          />
+        </Route>
+        <Route path='/hosted' exact>
+          <Hosted
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}

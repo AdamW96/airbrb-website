@@ -44,7 +44,7 @@ const checkValidName = (name) => {
 //   return rePassword.test(password)
 // }
 
-const registerFunction = (email, password, name, showAlertMsg) => {
+const registerFunction = (email, password, confirmPwd, name, showAlertMsg, history, setCurrentUser) => {
   if (!checkValidName(name)) {
     showAlertMsg('error', 'input valid name')
     return
@@ -52,19 +52,32 @@ const registerFunction = (email, password, name, showAlertMsg) => {
     showAlertMsg('error', 'Please input valid email')
     return
   }
+  if (password !== confirmPwd) {
+    showAlertMsg('error', 'Make sure two passwords are same')
+    return
+  }
   const data = { email, password, name }
-  console.log(data)
   fetchFunc('/user/auth/register', 'POST', data).then((response) => {
     if (response.status !== 200) {
       showAlertMsg('error', 'This email has been used, change a new one')
-    } else {
-      showAlertMsg('success', 'Register successfully')
+      return
     }
+    response.json().then(data => {
+      showAlertMsg('success', 'Register successfully')
+      localStorage.setItem('user', JSON.stringify(data))
+      setCurrentUser(JSON.parse(localStorage.getItem('user')))
+      history.push('/')
+    })
   })
 }
 
 export default function Register (props) {
-  const { setShowAlert } = props
+  const { setCurrentUser, setShowAlert } = props
+  const [firstName, setFirstName] = React.useState('')
+  const [lastName, setLastName] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [confirmPassword, setConfirmPassword] = React.useState('')
+  const [emailState, setEmailState] = React.useState('')
   const history = useHistory()
   const styles = useStyle()
 
@@ -76,21 +89,42 @@ export default function Register (props) {
   }
 
   const showAlertMsg = (type, content) => {
-    window.showAlert = true
     setShowAlert({ alertType: type, alertContent: content })
   }
 
+  const handleFirstName = (e) => {
+    setFirstName(e.target.value)
+  }
+
+  const handleLastName = (e) => {
+    setLastName(e.target.value)
+  }
+
+  const handleEmail = (e) => {
+    setEmailState(e.target.value)
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const handleConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value)
+  }
+
   const handleSubmit = (event) => {
-    console.log('come to handle submit')
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    const name = data.get('firstName') + data.get('lastName')
-    console.log(name, data.get('password'))
+    const name = `${firstName} ${lastName}`
+    const pwd = password
+    const confirmPwd = confirmPassword
+    const email = emailState
     registerFunction(
-      data.get('email'),
-      data.get('password'),
+      email,
+      pwd,
+      confirmPwd,
       name,
-      showAlertMsg
+      showAlertMsg,
+      history,
+      setCurrentUser
     )
   }
 
@@ -111,7 +145,7 @@ export default function Register (props) {
         <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
-        <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -122,6 +156,7 @@ export default function Register (props) {
                 id='firstName'
                 label='First Name'
                 autoFocus
+                onChange = {handleFirstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -132,6 +167,7 @@ export default function Register (props) {
                 label='Last Name'
                 name='lastName'
                 autoComplete='family-name'
+                onChange = {handleLastName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -142,6 +178,7 @@ export default function Register (props) {
                 label='Email Address'
                 name='email'
                 autoComplete='email'
+                onChange = {handleEmail}
               />
             </Grid>
             <Grid item xs={12}>
@@ -153,16 +190,30 @@ export default function Register (props) {
                 type='password'
                 id='password'
                 autoComplete='new-password'
+                onChange = {handlePassword}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name='confirmPassword'
+                label='Confirm Your Password'
+                type='password'
+                id='confirmPassword'
+                autoComplete='new-password'
+                onChange = {handleConfirmPassword}
               />
             </Grid>
           </Grid>
           <br />
           <Button
-            type='submit'
+            type='button'
             fullWidth
             variant='contained'
             color='primary'
             className={styles.signup}
+            onClick = {handleSubmit}
           >
             Sign Up
           </Button>
@@ -192,4 +243,5 @@ export default function Register (props) {
 
 Register.propTypes = {
   setShowAlert: PropTypes.any,
+  setCurrentUser: PropTypes.any,
 }

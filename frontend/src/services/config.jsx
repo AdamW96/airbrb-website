@@ -9,8 +9,7 @@ const initData = {
     entirePlace: false,
     privateRoom: false,
     shareRoom: false,
-    bedsNumber: '',
-    bedRoomNumber: '',
+    bedRooms: [],
     bathRoomNumber: '',
     pool: false,
     BBQ: false,
@@ -22,4 +21,9 @@ const initData = {
     hotTub: false,
   },
 }
+
 export { BACKEND_URL, initData }
+
+/**
+ * bedRooms = [{bedsNumber:'',size:''},{},{}]
+ */
