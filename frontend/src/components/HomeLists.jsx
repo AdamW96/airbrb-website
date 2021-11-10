@@ -8,15 +8,36 @@ import React, { useEffect, useState } from 'react'
 import fetchFunc from '../services/fetchService'
 import PropTypes from 'prop-types';
 
+const checkImageOrVedio = (thumbnail) => {
+  return thumbnail.startsWith('data:image');
+}
+
 function ListingBody ({ title, numReviews, price, thumbnail }) {
+  console.log(thumbnail);
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        component="img"
-        height="140"
-        image={thumbnail}
-        alt="green iguana"
-      />
+      {checkImageOrVedio(thumbnail) && (
+        <>
+        <CardMedia
+          component="img"
+          height="310"
+          image={thumbnail}
+          alt="green iguana"
+        />
+        </>
+      )}
+      {!checkImageOrVedio(thumbnail) && (
+        <div style= { { 'text-align': 'center' } }>
+        <iframe
+          width="420"
+          height="315"
+          text-align='center'
+          title="YouTube video player"
+          src={thumbnail}
+          allowFullScreen>
+        </iframe>
+        </div>
+      )}
       <CardContent>
         <Typography variant="body2" color="text.secondary" align='center'>
           <b>🔹 Title:{'  '}</b>{title}
@@ -60,16 +81,11 @@ const useFetch = () => {
 
 function HomeLists () {
   const allListings = useFetch().response;
-  console.log(allListings);
   return (
     <div id="body1">
-      <>
-      {/* <br /> */}
       {Object.keys(allListings).map(function (key) {
-        console.log(allListings[key].title);
         return (< ListingBody key={allListings[key].id} title={allListings[key].title} numReviews={allListings[key].reviews.length} price={allListings[key].price} thumbnail={allListings[key].thumbnail} />)
       })}
-      </>
     </div>
   )
 }
