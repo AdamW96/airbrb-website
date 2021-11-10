@@ -1,54 +1,76 @@
 import {
-  Button,
   Card,
-  CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
-  makeStyles,
   Typography,
 } from '@material-ui/core'
-import React from 'react'
-import imgURL from '../images/house1.jpg'
-// import fetchFunc from '../services/fetchService'
+import React, { useEffect, useState } from 'react'
+import fetchFunc from '../services/fetchService'
+import PropTypes from 'prop-types';
 
-const useStyle = makeStyles((theme) => ({
-  cardContainer: {
-    marginBottom: theme.spacing(4)
-  },
-}))
+function ListingBody ({ title, numReviews, price, thumbnail }) {
+  return (
+    <Card sx={{ maxWidth: 345 }}>
+      <CardMedia
+        component="img"
+        height="140"
+        image={thumbnail}
+        alt="green iguana"
+      />
+      <CardContent>
+        <Typography variant="body2" color="text.secondary" align='center'>
+          <b>🔹 Title:{'  '}</b>{title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" align='center'>
+          <b>🔹 Number of reviews:{'  '}</b>{numReviews}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" align='center'>
+          <b>🔹 Price:{'  '}</b>${price}
+        </Typography>
+      </CardContent>
+      {/* <CardActions>
+        <Button size="small">Share</Button>
+        <Button size="small">Learn More</Button>
+      </CardActions> */}
+    </Card>
+  )
+}
+ListingBody.propTypes = {
+  title: PropTypes.string.isRequired,
+  numReviews: PropTypes.number.isRequired,
+  price: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string.isRequired,
+}
 
-// const lists = () => {
-//   fetchFunc()
-// }
+const useFetch = () => {
+  const [response, setResponse] = useState({});
+  useEffect(() => {
+    fetchFunc('/listings', 'GET').then((response) => {
+      if (response.status !== 200) {
+        console.log('error', response)
+        return
+      }
+      response.json().then((data) => {
+        setResponse(data.listings);
+      })
+    })
+  }, []);
+  return { response };
+}
 
 function HomeLists () {
-  const styles = useStyle()
+  const allListings = useFetch().response;
+  console.log(allListings);
   return (
-    <Card className={styles.cardContainer}>
-      <CardActionArea>
-        <CardMedia
-          className={styles.meida}
-          component='img'
-          height='250'
-          image={imgURL}
-          title='House1'
-        />
-        <CardContent>
-          <Typography variant='h5'>first house</Typography>
-          <Typography variant='body1'>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed sequi
-            ratione placeat laudantium a dolores quia quae distinctio adipisci
-            in alias mollitia, reprehenderit, culpa ullam hic tempora magnam
-            nostrum nulla?
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">Share</Button>
-        <Button size="small" color="primary">Learn More</Button>
-      </CardActions>
-    </Card>
+    <div id="body1">
+      <>
+      {/* <br /> */}
+      {Object.keys(allListings).map(function (key) {
+        console.log(allListings[key].title);
+        return (< ListingBody key={allListings[key].id} title={allListings[key].title} numReviews={allListings[key].reviews.length} price={allListings[key].price} thumbnail={allListings[key].thumbnail} />)
+      })}
+      </>
+    </div>
   )
 }
 
