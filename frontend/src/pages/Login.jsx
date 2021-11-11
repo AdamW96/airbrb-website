@@ -36,7 +36,8 @@ const loginFunction = (email, password, showAlert, goHomePage, setCurrentUser) =
     }
     response.json().then((data) => {
       console.log(data)
-      localStorage.setItem('user', JSON.stringify(data))
+      const userData = { token: data.token, email: email }
+      localStorage.setItem('user', JSON.stringify(userData))
       setCurrentUser(JSON.parse(localStorage.getItem('user')))
       showAlert('success', 'Log in successfully')
       goHomePage()

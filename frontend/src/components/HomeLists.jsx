@@ -65,7 +65,7 @@ function ListingBody ({ title, numReviews, price, thumbnail }) {
         <iframe
           width="420"
           height="315"
-          text-align='center'
+          textalign='center'
           title="YouTube video player"
           src={thumbnail}
           allowFullScreen>
@@ -73,13 +73,13 @@ function ListingBody ({ title, numReviews, price, thumbnail }) {
         </div>
       )}
       <CardContent>
-        <Typography variant="body2" color="text.secondary" align='center'>
+        <Typography variant="body2" color="textSecondary" align='center'>
           <b>🔹 Title:{'  '}</b>{title}
         </Typography>
-        <Typography variant="body2" color="text.secondary" align='center'>
+        <Typography variant="body2" color="textSecondary" align='center'>
           <b>🔹 Number of reviews:{'  '}</b>{numReviews}
         </Typography>
-        <Typography variant="body2" color="text.secondary" align='center'>
+        <Typography variant="body2" color="textSecondary" align='center'>
           <b>🔹 Price:{'  '}</b>${price}
         </Typography>
       </CardContent>
