@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 import fetchFunc from '../services/fetchService'
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,11 +43,17 @@ const getAllImage = (thumbnail) => {
   return allIMage;
 }
 
-function ListingBody ({ title, numReviews, price, thumbnail }) {
+function ListingBody ({ id, title, numReviews, price, thumbnail }) {
   const classes = useStyles();
+  const history = useHistory();
+  const goListingPage = () => {
+    const location = '/listings/' + id;
+    console.log(id)
+    history.push(location)
+  }
   return (
     <div>
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} onClick={goListingPage}>
       {checkImageOrVedio(thumbnail) && (
         <div className={classes.root}>
           <ImageList className={classes.imageList} cols={1}>
@@ -98,6 +105,7 @@ ListingBody.propTypes = {
   numReviews: PropTypes.number.isRequired,
   price: PropTypes.string.isRequired,
   thumbnail: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 }
 
 const useFetch = () => {
@@ -121,7 +129,7 @@ function HomeLists () {
   return (
     <div id="body1">
       {Object.keys(allListings).map(function (key) {
-        return (< ListingBody key={allListings[key].id} title={allListings[key].title} numReviews={allListings[key].reviews.length} price={allListings[key].price} thumbnail={allListings[key].thumbnail} />)
+        return (< ListingBody key={allListings[key].id} id={JSON.stringify(allListings[key].id)} title={allListings[key].title} numReviews={allListings[key].reviews.length} price={allListings[key].price} thumbnail={allListings[key].thumbnail} />)
       })}
     </div>
   )

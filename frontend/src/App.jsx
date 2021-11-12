@@ -8,6 +8,7 @@ import Hosted from './pages/Hosted'
 import Edit from './pages/Edit'
 import Navbar from './components/Navbar'
 import AlertMsg from './components/AlertMsg'
+import Listing from './pages/Listing'
 
 // import Leftbar from './components/Leftbar'
 // import Rightbar from './components/Rightbar'
@@ -67,6 +68,14 @@ function App () {
         </Route>
         <Route path='/edit/:id' exact>
           <Edit
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            setShowAlert={setShowAlert}
+          />
+        </Route>
+        {/* 加的点击某个房源，然后查看具体信息 */}
+        <Route path='/listings/:id' exact>
+          <Listing
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}
