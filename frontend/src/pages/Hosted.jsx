@@ -28,12 +28,15 @@ function Hosted (props) {
       }
       response.json().then((data) => {
         const detailListings = []
+        const ownerListings = []
         const list = data.listings
         for (let i = 0; i < list.length; i++) {
-          if (currentUser.email !== list[i].owner) {
-            continue
+          if (currentUser.email === list[i].owner) {
+            ownerListings.push(list[i])
           }
-          const listId = list[i].id
+        }
+        for (let i = 0; i < ownerListings.length; i++) {
+          const listId = ownerListings[i].id
           fetchFunc(`/listings/${listId}`, 'GET').then(response => {
             if (response.status !== 200) {
               return
@@ -41,7 +44,7 @@ function Hosted (props) {
             response.json().then((data) => {
               const newData = { id: listId, ...data.listing }
               detailListings.push(newData)
-              if (detailListings.length === list.length) {
+              if (detailListings.length === ownerListings.length) {
                 setListings(detailListings)
               }
             })
@@ -61,7 +64,7 @@ function Hosted (props) {
   return (
     <React.Fragment>
       <Container className={styles.container}>
-        <HostedLists lists = {listings}></HostedLists>
+        <HostedLists lists = {listings} setShowAlert={setShowAlert} setFetchData={setFetchData}></HostedLists>
         <Button onClick={testFun}>TEST</Button>
       </Container>
     </React.Fragment>

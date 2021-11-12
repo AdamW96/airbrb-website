@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Create from './pages/Create'
 import Hosted from './pages/Hosted'
+import Edit from './pages/Edit'
 import Navbar from './components/Navbar'
 import AlertMsg from './components/AlertMsg'
 
@@ -59,6 +60,13 @@ function App () {
         </Route>
         <Route path='/hosted' exact>
           <Hosted
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            setShowAlert={setShowAlert}
+          />
+        </Route>
+        <Route path='/edit/:id' exact>
+          <Edit
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}

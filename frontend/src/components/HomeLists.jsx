@@ -61,7 +61,7 @@ function ListingBody ({ title, numReviews, price, thumbnail }) {
         </div>
       )}
       {!checkImageOrVedio(thumbnail) && (
-        <div style= { { 'text-align': 'center' } }>
+        <div style= { { textAlign: 'center' } }>
         <iframe
           width="420"
           height="315"

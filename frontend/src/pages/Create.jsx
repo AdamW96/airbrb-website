@@ -154,12 +154,23 @@ export default function Create (props) {
     }
     if (dataState.metadata.bedRooms.length > 0) {
       for (let i = 0; i < dataState.metadata.bedRooms.length; i++) {
-        if (dataState.metadata.bedRooms[i].bedsNumber.length === 0 || dataState.metadata.bedRooms[i].size.length === 0) {
-          showAlertMsg('error', 'You must finish all empty bedroom or remove it !')
+        if (
+          dataState.metadata.bedRooms[i].bedsNumber.length === 0 ||
+          dataState.metadata.bedRooms[i].size.length === 0
+        ) {
+          showAlertMsg(
+            'error',
+            'You must finish all empty bedroom or remove it !'
+          )
           return false
         }
-        if (!/^[0-9]*[1-9][0-9]*$/.test(dataState.metadata.bedRooms[i].bedsNumber)) {
-          showAlertMsg('error', 'You must enter positive number in number of beds')
+        if (
+          !/^[0-9]*[1-9][0-9]*$/.test(dataState.metadata.bedRooms[i].bedsNumber)
+        ) {
+          showAlertMsg(
+            'error',
+            'You must enter positive number in number of beds'
+          )
           return false
         }
       }
@@ -266,13 +277,14 @@ export default function Create (props) {
     } else if (e.target.name === 'bathroom') {
       newData.metadata.bathRoomNumber = e.target.value
     }
+
     setdataState(newData)
   }
 
   const handleAddNewRoom = () => {
     const newData = { ...dataState }
     if (newData.metadata.bedRooms.length >= 50) {
-      showAlertMsg('error', 'You can\'t add more bedroom, maximum number is 50')
+      showAlertMsg('error', "You can't add more bedroom, maximum number is 50")
       return
     }
     const newRoom = { bedsNumber: '', size: '' }
@@ -306,7 +318,9 @@ export default function Create (props) {
     return (
       <Grid container spacing={3} className={styles.bedroomsList} key={index}>
         <Grid item textAlign='right' xs={3} className={styles.listItem}>
-          <Typography className={styles.listTitle}>{`Room ${index + 1}`}</Typography>
+          <Typography className={styles.listTitle}>{`Room ${
+            index + 1
+          }`}</Typography>
         </Grid>
         <Grid item textAlign='center' xs={3}>
           <TextField
@@ -321,8 +335,9 @@ export default function Create (props) {
             }}
             InputProps={{
               inputProps: {
-                max: 50, min: 0
-              }
+                max: 50,
+                min: 0,
+              },
             }}
           />
         </Grid>
@@ -332,7 +347,7 @@ export default function Create (props) {
             <Select
               labelId='select-label'
               id='select'
-              name = {`size#${index}`}
+              name={`size#${index}`}
               value={dataState.metadata.bedRooms[index].size}
               onChange={(e) => {
                 handleChangeBeds(e)
@@ -344,9 +359,12 @@ export default function Create (props) {
           </FormControl>
         </Grid>
         <Grid item textAlign='left' xs={3}>
-          <IconButton name={`delete#${index}`} onClick = {(e) => {
-            removeRoom(e)
-          }}>
+          <IconButton
+            name={`delete#${index}`}
+            onClick={(e) => {
+              removeRoom(e)
+            }}
+          >
             <DeleteIcon />
           </IconButton>
         </Grid>
@@ -379,18 +397,20 @@ export default function Create (props) {
           if (i === Inputimage.length - 1) {
             const data = { ...dataState }
             data.thumbnail = thumbnailStr
-            fetchFunc('/listings/new', 'POST', data).then((response) => {
-              if (response.status !== 200) {
-                showAlertMsg('error', 'invalid submit')
-                return
-              }
-              setdataState({ ...initData })
-              showAlertMsg('success', 'create new list successfully')
-              history.push('/hosted')
-            }).catch((err) => {
-              console.log(err)
-              showAlertMsg('error', 'can not connect server')
-            })
+            fetchFunc('/listings/new', 'POST', data)
+              .then((response) => {
+                if (response.status !== 200) {
+                  showAlertMsg('error', 'invalid submit')
+                  return
+                }
+                setdataState({ ...initData })
+                showAlertMsg('success', 'create new list successfully')
+                history.push('/hosted')
+              })
+              .catch((err) => {
+                console.log(err)
+                showAlertMsg('error', 'can not connect server')
+              })
           }
         })
       }
@@ -401,18 +421,20 @@ export default function Create (props) {
         return
       }
       data.thumbnail = youtubeURL
-      fetchFunc('/listings/new', 'POST', data).then((response) => {
-        if (response.status !== 200) {
-          showAlertMsg('error', 'invalid submit')
-          return
-        }
-        showAlertMsg('success', 'create new list successfully')
-        history.push('/hosted')
-        setdataState({ ...initData })
-      }).catch((err) => {
-        console.log(err)
-        showAlertMsg('error', 'can not connect server')
-      })
+      fetchFunc('/listings/new', 'POST', data)
+        .then((response) => {
+          if (response.status !== 200) {
+            showAlertMsg('error', 'invalid submit')
+            return
+          }
+          showAlertMsg('success', 'create new list successfully')
+          history.push('/hosted')
+          setdataState({ ...initData })
+        })
+        .catch((err) => {
+          console.log(err)
+          showAlertMsg('error', 'can not connect server')
+        })
     }
   }
 
@@ -534,8 +556,8 @@ export default function Create (props) {
                 onChange={handleChangeAddress}
                 InputProps={{
                   inputProps: {
-                    min: 0
-                  }
+                    min: 0,
+                  },
                 }}
               />
             </Grid>
@@ -582,7 +604,7 @@ export default function Create (props) {
                 onChange={handleChangeRooms}
                 InputProps={{
                   inputProps: {
-                    min: 0
+                    min: 0,
                   },
                   startAdornment: (
                     <InputAdornment position='start'>
@@ -604,8 +626,9 @@ export default function Create (props) {
                 onChange={handleChangeRooms}
                 InputProps={{
                   inputProps: {
-                    max: 50, min: 0
-                  }
+                    max: 50,
+                    min: 0,
+                  },
                 }}
               />
             </Grid>
