@@ -83,13 +83,14 @@ function App () {
             setShowAlert={setShowAlert}
           />
         </Route>
-        <Route path='/requests/:listingId' exact>
+        <Route path='/requests:/stingId' exact>
           <Requests
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}
           />
         </Route>
+        {/* 根据ID写review */}
         <Route path='/review/:id/:listID' exact>
           <Review
             currentUser={currentUser}
