@@ -8,6 +8,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers'
 import PropTypes from 'prop-types'
+import { useHistory } from 'react-router-dom'
 
 function getModalStyle () {
   const top = 50
@@ -61,6 +62,7 @@ export default function CardBottom (props) {
   }, [fetchData])
 
   React.useEffect(() => {
+    console.log(bookings)
     let info = null
     for (let i = 0; i < bookings.length; i++) {
       if (
@@ -175,6 +177,11 @@ export default function CardBottom (props) {
       }
     })
   }
+  const history = useHistory()
+  const goReviewPage = (id, listID) => {
+    const location = '/review/' + id + '/' + listID;
+    history.push(location)
+  }
 
   return (
     <React.Fragment>
@@ -233,12 +240,13 @@ export default function CardBottom (props) {
             </Button>
           )}
           {currentUser && !bookingInfo && (
+            // 这里先被我改了
             <Button variant='contained' disabled>
               Comment
             </Button>
           )}
           {currentUser && bookingInfo && (
-            <Button variant='contained' color='primary'>
+            <Button variant='contained' color='primary' onClick={() => { goReviewPage(bookingInfo.id, listingId) }}>
               Comment
             </Button>
           )}

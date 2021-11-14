@@ -9,7 +9,11 @@ import Edit from './pages/Edit'
 import Navbar from './components/Navbar'
 import AlertMsg from './components/AlertMsg'
 import Listing from './pages/Listing'
+<<<<<<< HEAD
 import Requests from './pages/Requests'
+=======
+import Review from './pages/Review'
+>>>>>>> 2cb1e5b49d87af8e37de7f59e987c386419b0698
 
 // import Leftbar from './components/Leftbar'
 // import Rightbar from './components/Rightbar'
@@ -82,8 +86,14 @@ function App () {
             setShowAlert={setShowAlert}
           />
         </Route>
+<<<<<<< HEAD
         <Route path='/requests/:listingId' exact>
           <Requests
+=======
+        {/* 根据ID写review */}
+        <Route path='/review/:id/:listID' exact>
+          <Review
+>>>>>>> 2cb1e5b49d87af8e37de7f59e987c386419b0698
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}
