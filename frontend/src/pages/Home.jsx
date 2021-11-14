@@ -1,22 +1,19 @@
-import Feed from '../components/Feed';
+import { Container, makeStyles } from '@material-ui/core';
+// import { Person } from '@material-ui/icons';
 import React from 'react'
-
-// inital global part
-
-// const useStyle = makeStyles((theme) => ({
-//   rightbar: {
-//     [theme.breakpoints.down('sm')]: {
-//       display: 'none',
-//     },
-//   },
-// }));
-
+import HomeLists from '../components/HomeLists'
+const useStyle = makeStyles((theme) => ({
+  container: {
+    paddingTop: theme.spacing(10),
+  },
+}));
 function Home () {
-  // const styles = useStyle();
+  const styles = useStyle();
+
   return (
-    <div>
-      <Feed />
-    </div>
+    <Container className={styles.container}>
+      <HomeLists />
+    </Container>
   );
 }
 

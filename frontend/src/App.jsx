@@ -83,7 +83,7 @@ function App () {
             setShowAlert={setShowAlert}
           />
         </Route>
-        <Route path='/requests:/stingId' exact>
+        <Route path='/requests/:listingId' exact>
           <Requests
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}

@@ -71,7 +71,7 @@ function ListingBody ({ id, title, numReviews, price, thumbnail }) {
         {!checkImageOrVedio(thumbnail) && (
           <Grid container>
             <Grid container justifyContent='center'>
-                <ReactPlayer url={thumbnail} />
+              <ReactPlayer url={thumbnail} />
             </Grid>
           </Grid>
         )}
@@ -106,37 +106,89 @@ ListingBody.propTypes = {
 }
 
 const useFetch = () => {
-  const [response, setResponse] = useState({})
+  const [allLists, setAllLists] = useState([])
+  const [publishedList, setPublished] = useState([])
   useEffect(() => {
     fetchFunc('/listings', 'GET').then((response) => {
       if (response.status !== 200) {
         return
       }
       response.json().then((data) => {
-        setResponse(data.listings)
+        setAllLists(data.listings)
       })
     })
   }, [])
-  return { response }
+  useEffect(() => {
+    const pbList = []
+    let index = 0
+    console.log(allLists)
+    for (let i = 0; i < allLists.length; i++) {
+      fetchFunc(`/listings/${allLists[i].id}`, 'GET').then((response) => {
+        if (response.status === 200) {
+          response.json().then((data) => {
+            console.log(data)
+            index += 1
+            if (data.listing.published) {
+              pbList.push(data.listing)
+            }
+            console.log(pbList, index, response.length)
+            if (index === allLists.length) {
+              setPublished(pbList)
+            }
+          })
+        } else {
+          index += 1
+          if (index === allLists.length) {
+            setPublished(pbList)
+          }
+        }
+      })
+    }
+  }, [allLists])
+
+  useEffect(() => {
+    console.log(publishedList)
+  }, [publishedList])
+
+  return publishedList
+}
+
+const compare = (a, b) => {
+  if (a.title.toLowerCase() < b.title.toLowerCase()) {
+    return -1
+  }
+  if (a.title.toLowerCase() > b.title.toLowerCase()) {
+    return 1
+  }
+  return 0
 }
 
 function HomeLists () {
-  const allListings = useFetch().response
+  const allListings = useFetch()
+  console.log('all==>', allListings)
+  if (allListings.length !== 0) {
+    allListings.sort(compare)
+  }
   return (
-    <div id='body1'>
-      {Object.keys(allListings).map(function (key) {
-        return (
-          <ListingBody
-            key={allListings[key].id}
-            id={JSON.stringify(allListings[key].id)}
-            title={allListings[key].title}
-            numReviews={allListings[key].reviews.length}
-            price={allListings[key].price}
-            thumbnail={allListings[key].thumbnail}
-          />
-        )
-      })}
-    </div>
+    <React.Fragment>
+      {allListings.length === 0 && <h1>No data ... </h1>}
+      {allListings.length !== 0 && (
+        <div id='body1'>
+          {Object.keys(allListings).map(function (key) {
+            return (
+              <ListingBody
+                key={allListings[key].id}
+                id={JSON.stringify(allListings[key].id)}
+                title={allListings[key].title}
+                numReviews={allListings[key].reviews.length}
+                price={allListings[key].price}
+                thumbnail={allListings[key].thumbnail}
+              />
+            )
+          })}
+        </div>
+      )}
+    </React.Fragment>
   )
 }
 
