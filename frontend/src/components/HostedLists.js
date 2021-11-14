@@ -284,15 +284,17 @@ export default function HostedList (props) {
   }
 
   const submitUnpublish = () => {
-    fetchFunc(`/listings/unpublish/${currentListId}`, 'PUT').then(response => {
-      if (response.status !== 200) {
-        showAlertMsg('error', 'Something wrong')
-        return
+    fetchFunc(`/listings/unpublish/${currentListId}`, 'PUT').then(
+      (response) => {
+        if (response.status !== 200) {
+          showAlertMsg('error', 'Something wrong')
+          return
+        }
+        showAlertMsg('success', 'unpublish this list successfully!')
+        setFetchData((preState) => !preState)
+        handleCloseUnPublishModal()
       }
-      showAlertMsg('success', 'unpublish this list successfully!')
-      setFetchData((preState) => !preState)
-      handleCloseUnPublishModal()
-    })
+    )
   }
 
   const jumpToEdit = (e) => {
@@ -301,7 +303,17 @@ export default function HostedList (props) {
 
   return (
     <React.Fragment>
-      {lists.length === 0 && <Typography>No authority or no data</Typography>}
+      {lists.length === 0 && (
+        <Grid container>
+          <Grid item xs={12} align='center'>
+            <Typography variant='h5'>Loading...</Typography>
+            <Typography variant='body1'>
+              (If loading time too long, maybe you do not have any hosted
+              listing, go to create a new one)
+            </Typography>
+          </Grid>
+        </Grid>
+      )}
       {lists.length !== 0 && (
         <Grid container spacing={3}>
           {lists.map((ele, index) => {
@@ -412,7 +424,12 @@ export default function HostedList (props) {
                     </Grid>
                   </CardContent>
                   <CardActions>
-                    <Button size='large' color='primary' name = {ele.id} onClick={jumpToEdit}>
+                    <Button
+                      size='large'
+                      color='primary'
+                      name={ele.id}
+                      onClick={jumpToEdit}
+                    >
                       Edit
                     </Button>
                     <Button
@@ -427,7 +444,7 @@ export default function HostedList (props) {
                       <Button
                         size='large'
                         color='secondary'
-                        name = {ele.id}
+                        name={ele.id}
                         onClick={handleOpenUnPublishModal}
                       >
                         Unpublish

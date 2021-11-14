@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Button, makeStyles } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import fetchFunc from '../services/fetchService'
 import HostedLists from '../components/HostedLists';
 import PropTypes from 'prop-types'
@@ -57,15 +57,10 @@ function Hosted (props) {
     console.log('final list==>', listings)
   }, [listings])
 
-  const testFun = () => {
-    setFetchData(preState => !preState)
-  }
-
   return (
     <React.Fragment>
       <Container className={styles.container}>
         <HostedLists lists = {listings} setShowAlert={setShowAlert} setFetchData={setFetchData}></HostedLists>
-        <Button onClick={testFun}>TEST</Button>
       </Container>
     </React.Fragment>
   );
