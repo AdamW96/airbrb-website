@@ -20,7 +20,6 @@ function Hosted (props) {
     setShowAlert({ alertType: type, alertContent: content })
   }
   React.useEffect(() => {
-    console.log('coming to effect')
     fetchFunc('/listings', 'GET').then(response => {
       if (response.status !== 200) {
         showAlertMsg('error', 'Can\'t get data')
@@ -53,9 +52,6 @@ function Hosted (props) {
       })
     })
   }, [fetchData])
-  React.useEffect(() => {
-    console.log('final list==>', listings)
-  }, [listings])
 
   return (
     <React.Fragment>

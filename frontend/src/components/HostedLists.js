@@ -148,7 +148,6 @@ export default function HostedList (props) {
     // change the date from date time to second time
     const startSeconds = startTime.setHours(0, 0, 0, 0)
     const endSeconds = endTime.setHours(0, 0, 0, 0)
-    console.log(startSeconds, endSeconds)
     if (startSeconds > endSeconds) {
       showAlertMsg('error', 'Start date must earler than end date')
       return
@@ -219,7 +218,6 @@ export default function HostedList (props) {
         ? '0' + (date.getMonth() + 1)
         : date.getMonth() + 1
     const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-    // console.log(`${day}/${month}/${year}`)
     return `${day}/${month}/${year}`
   }
   const displayDate = () => {
@@ -299,6 +297,10 @@ export default function HostedList (props) {
 
   const jumpToEdit = (e) => {
     history.push(`/edit/${e.currentTarget.name}`)
+  }
+
+  const handleJumpToBookRequest = (e) => {
+    history.push(`/requests/${e.currentTarget.name}`)
   }
 
   return (
@@ -424,42 +426,66 @@ export default function HostedList (props) {
                     </Grid>
                   </CardContent>
                   <CardActions>
-                    <Button
-                      size='large'
-                      color='primary'
-                      name={ele.id}
-                      onClick={jumpToEdit}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      size='large'
-                      color='secondary'
-                      name={ele.id}
-                      onClick={handleOpenDeleteModal}
-                    >
-                      Delete
-                    </Button>
-                    {ele.published && (
-                      <Button
-                        size='large'
-                        color='secondary'
-                        name={ele.id}
-                        onClick={handleOpenUnPublishModal}
-                      >
-                        Unpublish
-                      </Button>
-                    )}
-                    {!ele.published && (
-                      <Button
-                        name={ele.id}
-                        size='large'
-                        color='primary'
-                        onClick={handleOpenDateModal}
-                      >
-                        Publish
-                      </Button>
-                    )}
+                    <Grid container spacing={3}>
+                      <Grid item>
+                        <Button
+                          size='small'
+                          color='primary'
+                          variant = 'contained'
+                          name={ele.id}
+                          onClick={jumpToEdit}
+                        >
+                          Edit
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          size='small'
+                          color='secondary'
+                          variant = 'contained'
+                          name={ele.id}
+                          onClick={handleOpenDeleteModal}
+                        >
+                          Delete
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        {ele.published && (
+                          <Button
+                            size='small'
+                            color='secondary'
+                            variant = 'contained'
+                            name={ele.id}
+                            onClick={handleOpenUnPublishModal}
+
+                          >
+                            Unpublish
+                          </Button>
+                        )}
+                        {!ele.published && (
+                          <Button
+                            name={ele.id}
+                            size='small'
+                            color='primary'
+                            variant = 'contained'
+                            onClick={handleOpenDateModal}
+                          >
+                            Publish
+                          </Button>
+                        )}
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          size='small'
+                          color='primary'
+                          variant='contained'
+                          name={ele.id}
+                          onClick={handleJumpToBookRequest}
+                        >
+                          Booking Requests
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </CardActions>
                 </Card>
               </Grid>

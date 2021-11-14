@@ -26,16 +26,12 @@ const useStyle = makeStyles((theme) => ({
 
 const loginFunction = (email, password, showAlert, goHomePage, setCurrentUser) => {
   const data = { email, password }
-  console.log(data)
   fetchFunc('/user/auth/login', 'POST', data).then((response) => {
-    console.log('response ===>', response)
     if (response.status !== 200) {
-      console.log('sign in error', response)
       showAlert('error', 'invalid email or password')
       return
     }
     response.json().then((data) => {
-      console.log(data)
       const userData = { token: data.token, email: email }
       localStorage.setItem('user', JSON.stringify(userData))
       setCurrentUser(JSON.parse(localStorage.getItem('user')))
@@ -72,7 +68,6 @@ function Login (props) {
       goHomePage,
       setCurrentUser
     )
-    console.log(data.get('email') + data.get('password'))
   }
 
   return (

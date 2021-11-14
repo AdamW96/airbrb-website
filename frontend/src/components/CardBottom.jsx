@@ -72,7 +72,6 @@ export default function CardBottom (props) {
       }
     }
     setBookingInfo(info)
-    console.log(listingInfo)
   }, [bookings])
 
   const showAlertMsg = (type, content) => {
@@ -151,43 +150,26 @@ export default function CardBottom (props) {
       showAlertMsg('error', 'Can not book your own list')
       return
     }
-    let hasRightRange = false
-    for (let i = 0; i < listingInfo.availability.length; i++) {
-      console.log(listingInfo.availability[i], startTime, endTime)
-      if (
-        startTime >= listingInfo.availability[i].start &&
-        endTime <= listingInfo.availability[i].end
-      ) {
-        hasRightRange = true
-        console.log(startTime, endTime)
-        const dateRange = { start: startTime, end: endTime }
-        const secondGap = dateRange.end - dateRange.start
-        const days = Math.floor(secondGap / (24 * 3600 * 1000)) + 1
-        const totalPrice = days * listingInfo.price
-        const data = { dateRange, totalPrice }
-        fetchFunc(`/bookings/new/${listingId}`, 'POST', data).then(
-          (response) => {
-            console.log(response)
-            if (response.status === 200) {
-              setConfirmStart(`${selectStartDate.getDate()}/${selectStartDate.getMonth() + 1}/${selectStartDate.getFullYear()}`)
-              setConfirmEnd(`${selectEndDate.getDate()}/${selectEndDate.getMonth() + 1}/${selectEndDate.getFullYear()}`)
-              setFetchData((preState) => !preState)
-              handleCloseDate()
-              handleOpenConfirm()
-            }
-          }
-        )
-        break
+    const dateRange = { start: startTime, end: endTime }
+    const secondGap = dateRange.end - dateRange.start
+    const days = Math.floor(secondGap / (24 * 3600 * 1000)) + 1
+    const totalPrice = days * listingInfo.price
+    const data = { dateRange, totalPrice }
+    fetchFunc(`/bookings/new/${listingId}`, 'POST', data).then(
+      (response) => {
+        if (response.status === 200) {
+          setConfirmStart(`${selectStartDate.getDate()}/${selectStartDate.getMonth() + 1}/${selectStartDate.getFullYear()}`)
+          setConfirmEnd(`${selectEndDate.getDate()}/${selectEndDate.getMonth() + 1}/${selectEndDate.getFullYear()}`)
+          setFetchData((preState) => !preState)
+          handleCloseDate()
+          handleOpenConfirm()
+        }
       }
-    }
-    if (!hasRightRange) {
-      showAlertMsg('error', 'No available time for this date range')
-    }
+    )
   }
 
   const deleteBook = () => {
     fetchFunc(`/bookings/${bookingInfo.id}`, 'DELETE').then((response) => {
-      console.log(response)
       if (response.status === 200) {
         setFetchData((preState) => !preState)
       }

@@ -41,7 +41,6 @@ export default function Edit (props) {
   const styles = useStyles()
   const history = useHistory()
   const location = useLocation()
-  const [listData, setListData] = React.useState(null)
   const [propertyType, setPropertyType] = React.useState(null)
   const [thumbnailType, setThumbnailType] = React.useState('image')
   const [inputImages, setInputImages] = React.useState([])
@@ -54,7 +53,6 @@ export default function Edit (props) {
 
   React.useEffect(() => {
     fetchFunc(`/listings/${listingId}`, 'GET').then((response) => {
-      console.log(response)
       if (response.status !== 200) {
         showAlertMsg('error', "Can't get data about this list from backend")
         return
@@ -65,9 +63,7 @@ export default function Edit (props) {
         delete newData.availability
         delete newData.published
         delete newData.postedOn
-        setListData(newData)
         setUpdateData(newData)
-        console.log(newData)
         if (newData.metadata.entirePlace) {
           setPropertyType('entirePlace')
         } else if (newData.metadata.privateRoom) {
@@ -84,13 +80,6 @@ export default function Edit (props) {
       })
     })
   }, [])
-  React.useEffect(() => {
-    console.log(updateData)
-  }, [updateData])
-
-  React.useEffect(() => {
-    console.log(listData)
-  }, [listData])
 
   const handleChangeProperty = (e) => {
     const data = { ...updateData }

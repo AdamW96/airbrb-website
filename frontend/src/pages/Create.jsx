@@ -202,7 +202,6 @@ export default function Create (props) {
 
   const handlePropertyType = (e) => {
     const newData = { ...dataState }
-    console.log(e.currentTarget)
     if (e.currentTarget.name === 'entirePlace') {
       if (newData.metadata.privateRoom || newData.metadata.shareRoom) {
         showAlertMsg('info', 'You can only choose one type')
@@ -227,7 +226,6 @@ export default function Create (props) {
 
   const handleAmenities = (e) => {
     const newData = { ...dataState }
-    console.log(e.currentTarget)
     if (e.currentTarget.name === 'pool') {
       newData.metadata.pool = !newData.metadata.pool
     } else if (e.currentTarget.name === 'BBQ') {
@@ -306,15 +304,12 @@ export default function Create (props) {
 
   const removeRoom = (e) => {
     const newData = { ...dataState }
-    console.log(e.currentTarget)
     const index = e.currentTarget.name.split('#')[1]
     newData.metadata.bedRooms.splice(index, 1)
-    console.log(newData)
     setdataState(newData)
   }
 
   const createOneRoom = (index) => {
-    console.log(dataState.metadata.bedRooms[index].bedsNumber)
     return (
       <Grid container spacing={3} className={styles.bedroomsList} key={index}>
         <Grid item textAlign='right' xs={3} className={styles.listItem}>

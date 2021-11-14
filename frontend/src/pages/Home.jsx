@@ -13,7 +13,6 @@ import React from 'react'
 
 function Home () {
   // const styles = useStyle();
-  console.log('come to home component')
   return (
     <div>
       <Feed />

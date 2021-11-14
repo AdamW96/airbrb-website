@@ -56,7 +56,6 @@ function Leftbar (props) {
   const history = useHistory()
   const styles = useStyle()
   const { currentUser, setCurrentUser, setShowAlert } = props
-  console.log(props)
   const showAlert = (type, message) => {
     window.showAlert = true
     setShowAlert({ alertType: type, alertContent: message })
@@ -64,7 +63,6 @@ function Leftbar (props) {
 
   const handleLogout = () => {
     fetchFunc('/user/auth/logout', 'POST').then((response) => {
-      console.log('this is response', response)
       if (response.status !== 200) {
         showAlert('error', 'network wrong')
         return
@@ -72,11 +70,9 @@ function Leftbar (props) {
       localStorage.removeItem('user')
       setCurrentUser(JSON.parse(localStorage.getItem('user')))
       history.push('/')
-      console.log('finish push')
       showAlert('success', 'log out successfully')
     })
   }
-  console.log('current user==>', currentUser)
   return (
       <Container className={styles.container}>
         <Link to='/' style={{ textDecoration: 'none', color: '#3f51b5' }}>
