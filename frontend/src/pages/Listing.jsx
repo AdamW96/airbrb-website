@@ -153,6 +153,18 @@ function Listing (props) {
     allIMage.pop()
     return allIMage
   }
+  const allsocre = [];
+  function countAverageSocre () {
+    Object.entries(reviews).map(([key, v]) => {
+      allsocre.push(v.socre);
+      return (allsocre);
+    })
+    const sum = allsocre.reduce((a, b) => a + b, 0);
+    const avg = (sum / allsocre.length) || 0;
+    return Math.floor(avg);
+  }
+  const averageScore = countAverageSocre();
+
   return (
     <Container className={classes.container}>
       <Grid container justifyContent='center'>
@@ -250,14 +262,13 @@ function Listing (props) {
                   ))}
                 </ul>
               </ListItem>
-              {/* SVG rating of the listing (based on user ratings) */}
+              {/* Average Rating of this listing */}
               <ListItem>
                 <ListItemIcon>
                   <StarIcon />
                 </ListItemIcon>
                 <ListItemText primary='Average Rating of this listing:' />
-                {/* <Typography component="legend">Rating of the listing</Typography> */}
-                {/* <Rating name="read-only" value={2} readOnly /> */}
+                <Rating name="read-only" value={averageScore} readOnly />
               </ListItem>
             </List>
           </CardContent>
