@@ -30,20 +30,25 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
   boldFont: {
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 }))
 
 export default function CardBottom (props) {
   const [bookings, setBookings] = React.useState([])
   const [modalStyle] = React.useState(getModalStyle)
   const [openDate, setOpenDate] = React.useState(false)
+  const [openConfirm, setOpenConfirm] = React.useState(false)
   const [bookingInfo, setBookingInfo] = React.useState(null)
   const [selectStartDate, setSelectStartDate] = React.useState(null)
   const [selectEndDate, setSelectEndDate] = React.useState(null)
+  const [confirmStart, setConfirmStart] = React.useState('')
+  const [confirmEnd, setConfirmEnd] = React.useState('')
   const styles = useStyles()
-  const { fetchData, listingId, listingInfo, setShowAlert, setFetchData } = props
+  const { fetchData, listingId, listingInfo, setShowAlert, setFetchData } =
+    props
   const currentUser = JSON.parse(localStorage.getItem('user'))
+
   React.useEffect(() => {
     fetchFunc('/bookings', 'GET').then((response) => {
       if (response.status !== 200) {
@@ -116,6 +121,14 @@ export default function CardBottom (props) {
     setOpenDate(false)
   }
 
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true)
+  }
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false)
+  }
+
   const handleSelectStartDate = (date) => {
     setSelectStartDate(date)
   }
@@ -156,8 +169,11 @@ export default function CardBottom (props) {
           (response) => {
             console.log(response)
             if (response.status === 200) {
-              setFetchData(preState => !preState)
-              showAlertMsg('success', 'Book list successfully')
+              setConfirmStart(`${selectStartDate.getDate()}/${selectStartDate.getMonth() + 1}/${selectStartDate.getFullYear()}`)
+              setConfirmEnd(`${selectEndDate.getDate()}/${selectEndDate.getMonth() + 1}/${selectEndDate.getFullYear()}`)
+              setFetchData((preState) => !preState)
+              handleCloseDate()
+              handleOpenConfirm()
             }
           }
         )
@@ -167,6 +183,15 @@ export default function CardBottom (props) {
     if (!hasRightRange) {
       showAlertMsg('error', 'No available time for this date range')
     }
+  }
+
+  const deleteBook = () => {
+    fetchFunc(`/bookings/${bookingInfo.id}`, 'DELETE').then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+        setFetchData((preState) => !preState)
+      }
+    })
   }
 
   return (
@@ -181,8 +206,11 @@ export default function CardBottom (props) {
             <React.Fragment>
               <Typography>You have already booked</Typography>
               <Typography>
-                  {'Booking status: '}<span className={styles.boldFont}>{`${bookingInfo.status}`}</span>
-                </Typography>
+                {'Booking status: '}
+                <span
+                  className={styles.boldFont}
+                >{`${bookingInfo.status}`}</span>
+              </Typography>
             </React.Fragment>
           )}
         </Grid>
@@ -202,9 +230,18 @@ export default function CardBottom (props) {
             </Button>
           )}
           {currentUser && bookingInfo && (
-            <Button variant='contained' disabled>
-              Already booked
-            </Button>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Button variant='contained' disabled>
+                  Already booked
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant='contained' onClick={deleteBook} color='secondary'>
+                  Delete
+                </Button>
+              </Grid>
+            </Grid>
           )}
         </Grid>
         <Grid item xs={3}>
@@ -219,7 +256,9 @@ export default function CardBottom (props) {
             </Button>
           )}
           {currentUser && bookingInfo && (
-            <Button variant='contained' color='primary'>Comment</Button>
+            <Button variant='contained' color='primary'>
+              Comment
+            </Button>
           )}
         </Grid>
       </Grid>
@@ -287,6 +326,34 @@ export default function CardBottom (props) {
                   </Button>
                 </Grid>
               </Grid>
+            </Grid>
+          </Grid>
+        </div>
+      </Modal>
+
+      <Modal
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        aria-labelledby='simple-modal-title'
+        aria-describedby='simple-modal-description'
+      >
+        <div style={modalStyle} className={styles.paper}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} align='center'>
+              <Typography variant='h5'>Confirmation</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant='h6'>{`Listing title: ${listingInfo.title}`}</Typography>
+              <Typography variant='h6'>{`From ${confirmStart} to ${confirmEnd}`}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                color='primary'
+                variant='contained'
+                onClick={handleCloseConfirm}
+              >
+                Ok
+              </Button>
             </Grid>
           </Grid>
         </div>

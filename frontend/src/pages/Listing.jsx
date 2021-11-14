@@ -57,23 +57,20 @@ function Listing (props) {
   }, [fetchData])
   const classes = useStyles()
   // getModalStyle is not a pure function, we roll the style only on the first render
-
   const DataOfListing = response
   const listingInfo = { title: '', owner: '', price: '', availability: [] }
   listingInfo.title = DataOfListing ? DataOfListing.title : ''
   listingInfo.owner = DataOfListing ? DataOfListing.owner : ''
   listingInfo.price = DataOfListing ? DataOfListing.price : ''
-  listingInfo.availability = DataOfListing ? DataOfListing.availability : []
-
-  console.log(response, listingInfo, window.count)
-  const addressData = response
-    ? response.address.street +
+  listingInfo.availability = DataOfListing ? DataOfListing.availability : ''
+  const addressData = DataOfListing
+    ? DataOfListing.address.street +
       ',' +
       ' ' +
-      response.address.city +
+      DataOfListing.address.city +
       ',' +
       ' ' +
-      response.address.state
+      DataOfListing.address.state
     : ' '
   const titleData = DataOfListing ? DataOfListing.title : ' '
   const roomType = DataOfListing
@@ -275,7 +272,7 @@ function Listing (props) {
             <Grid container justifyContent='center'>
               <CardBottom
                 dataListing={response}
-                setFetchListing={setFetchData}
+                setFetchData={setFetchData}
                 fetchData={fetchData}
                 setShowAlert={setShowAlert}
                 listingId={id}
