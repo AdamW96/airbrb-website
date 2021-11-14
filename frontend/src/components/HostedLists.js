@@ -22,6 +22,7 @@ import HotelIcon from '@material-ui/icons/Hotel'
 import BathtubIcon from '@material-ui/icons/Bathtub'
 import PropTypes from 'prop-types'
 import fetchFunc from '../services/fetchService'
+import ReactPlayer from 'react-player/youtube'
 
 function getModalStyle () {
   const top = 50
@@ -76,14 +77,6 @@ export default function HostedList (props) {
   const [startTime, setStartTime] = React.useState(null)
   const [endTime, setEndTime] = React.useState(null)
   const [timeRanges, setTimeRanges] = React.useState([])
-
-  React.useEffect(() => {
-    console.log(startTime)
-  }, [startTime])
-
-  React.useEffect(() => {
-    console.log(timeRanges)
-  }, [timeRanges])
 
   const showAlertMsg = (type, content) => {
     setShowAlert({ alertType: type, alertContent: content })
@@ -152,8 +145,10 @@ export default function HostedList (props) {
     if (!startTime || !endTime) {
       return
     }
-    const startSeconds = startTime.getTime()
-    const endSeconds = endTime.getTime()
+    // change the date from date time to second time
+    const startSeconds = startTime.setHours(0, 0, 0, 0)
+    const endSeconds = endTime.setHours(0, 0, 0, 0)
+    console.log(startSeconds, endSeconds)
     if (startSeconds > endSeconds) {
       showAlertMsg('error', 'Start date must earler than end date')
       return
@@ -224,7 +219,7 @@ export default function HostedList (props) {
         ? '0' + (date.getMonth() + 1)
         : date.getMonth() + 1
     const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-    console.log(`${day}/${month}/${year}`)
+    // console.log(`${day}/${month}/${year}`)
     return `${day}/${month}/${year}`
   }
   const displayDate = () => {
@@ -328,14 +323,7 @@ export default function HostedList (props) {
                   )}
                   {!checkImageOrVedio(ele.thumbnail) && (
                     <div style={{ textAlign: 'center' }}>
-                      <iframe
-                        width='420'
-                        height='315'
-                        textalign='center'
-                        title='YouTube video player'
-                        src={ele.thumbnail}
-                        allowFullScreen
-                      ></iframe>
+                      <ReactPlayer url={ele.thumbnail} />
                     </div>
                   )}
                   <CardContent>

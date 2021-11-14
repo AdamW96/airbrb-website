@@ -1,5 +1,6 @@
 import {
   Card,
+  Grid,
   CardContent,
   Typography,
   ImageList,
@@ -7,9 +8,10 @@ import {
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import fetchFunc from '../services/fetchService'
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router'
+import ReactPlayer from 'react-player/youtube'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,73 +33,70 @@ const useStyles = makeStyles((theme) => ({
     background:
       'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
   },
-}));
+}))
 
 const checkImageOrVedio = (thumbnail) => {
-  return thumbnail.startsWith('data:image');
+  return thumbnail.startsWith('data:image')
 }
 
 const getAllImage = (thumbnail) => {
-  const allIMage = thumbnail.split(' ');
-  allIMage.pop();
-  return allIMage;
+  const allIMage = thumbnail.split(' ')
+  allIMage.pop()
+  return allIMage
 }
 
 function ListingBody ({ id, title, numReviews, price, thumbnail }) {
-  const classes = useStyles();
-  const history = useHistory();
+  const classes = useStyles()
+  const history = useHistory()
   const goListingPage = () => {
-    const location = '/listings/' + id;
-    console.log(id)
+    const location = '/listings/' + id
     history.push(location)
   }
   return (
     <div>
-    <Card sx={{ maxWidth: 345 }} onClick={goListingPage}>
-      {checkImageOrVedio(thumbnail) && (
-        <div className={classes.root}>
-          <ImageList className={classes.imageList} cols={1}>
-            {getAllImage(thumbnail).map((imageBase64) => {
-              return (
-                <ImageListItem key={imageBase64}>
-                <img src={imageBase64} alt="Image of listings"/>
-                </ImageListItem>
-              )
-            })}
-          </ImageList>
-        </div>
-      )}
-      {!checkImageOrVedio(thumbnail) && (
-        <div style= { { textAlign: 'center' } }>
-        <iframe
-          width="420"
-          height="315"
-          textalign='center'
-          title="YouTube video player"
-          src={thumbnail}
-          allowFullScreen>
-        </iframe>
-        </div>
-      )}
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" align='center'>
-          <b>🔹 Title:{'  '}</b>{title}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" align='center'>
-          <b>🔹 Number of reviews:{'  '}</b>{numReviews}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" align='center'>
-          <b>🔹 Price:{'  '}</b>${price}
-        </Typography>
-      </CardContent>
-      {/* <CardActions>
+      <Card sx={{ maxWidth: 345 }} onClick={goListingPage}>
+        {checkImageOrVedio(thumbnail) && (
+          <div className={classes.root}>
+            <ImageList className={classes.imageList} cols={1}>
+              {getAllImage(thumbnail).map((imageBase64) => {
+                return (
+                  <ImageListItem key={imageBase64}>
+                    <img src={imageBase64} alt='Image of listings' />
+                  </ImageListItem>
+                )
+              })}
+            </ImageList>
+          </div>
+        )}
+        {!checkImageOrVedio(thumbnail) && (
+          <Grid container>
+            <Grid item align='center'>
+              <div style={{ textAlign: 'center' }}>
+                <ReactPlayer url={thumbnail} />
+              </div>
+            </Grid>
+          </Grid>
+        )}
+        <CardContent>
+          <Typography variant='body2' color='textSecondary' align='center'>
+            <b>🔹 Title:{'  '}</b>
+            {title}
+          </Typography>
+          <Typography variant='body2' color='textSecondary' align='center'>
+            <b>🔹 Number of reviews:{'  '}</b>
+            {numReviews}
+          </Typography>
+          <Typography variant='body2' color='textSecondary' align='center'>
+            <b>🔹 Price:{'  '}</b>${price}
+          </Typography>
+        </CardContent>
+        {/* <CardActions>
         <Button size="small">Share</Button>
         <Button size="small">Learn More</Button>
       </CardActions> */}
-    </Card>
-    <br />
+      </Card>
+      <br />
     </div>
-
   )
 }
 ListingBody.propTypes = {
@@ -109,7 +108,7 @@ ListingBody.propTypes = {
 }
 
 const useFetch = () => {
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState({})
   useEffect(() => {
     fetchFunc('/listings', 'GET').then((response) => {
       if (response.status !== 200) {
@@ -117,19 +116,28 @@ const useFetch = () => {
         return
       }
       response.json().then((data) => {
-        setResponse(data.listings);
+        setResponse(data.listings)
       })
     })
-  }, []);
-  return { response };
+  }, [])
+  return { response }
 }
 
 function HomeLists () {
-  const allListings = useFetch().response;
+  const allListings = useFetch().response
   return (
-    <div id="body1">
+    <div id='body1'>
       {Object.keys(allListings).map(function (key) {
-        return (< ListingBody key={allListings[key].id} id={JSON.stringify(allListings[key].id)} title={allListings[key].title} numReviews={allListings[key].reviews.length} price={allListings[key].price} thumbnail={allListings[key].thumbnail} />)
+        return (
+          <ListingBody
+            key={allListings[key].id}
+            id={JSON.stringify(allListings[key].id)}
+            title={allListings[key].title}
+            numReviews={allListings[key].reviews.length}
+            price={allListings[key].price}
+            thumbnail={allListings[key].thumbnail}
+          />
+        )
       })}
     </div>
   )
