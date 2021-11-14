@@ -129,7 +129,7 @@ const useFetch = () => {
             console.log(data)
             index += 1
             if (data.listing.published) {
-              pbList.push(data.listing)
+              pbList.push(allLists[i])
             }
             console.log(pbList, index, response.length)
             if (index === allLists.length) {
@@ -169,6 +169,7 @@ function HomeLists () {
   if (allListings.length !== 0) {
     allListings.sort(compare)
   }
+  console.log('alllisngs', allListings)
   return (
     <React.Fragment>
       {allListings.length === 0 && <h1>No data ... </h1>}
