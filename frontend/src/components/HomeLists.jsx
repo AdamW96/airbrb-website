@@ -70,10 +70,8 @@ function ListingBody ({ id, title, numReviews, price, thumbnail }) {
         )}
         {!checkImageOrVedio(thumbnail) && (
           <Grid container>
-            <Grid item align='center'>
-              <div style={{ textAlign: 'center' }}>
+            <Grid container justifyContent='center'>
                 <ReactPlayer url={thumbnail} />
-              </div>
             </Grid>
           </Grid>
         )}

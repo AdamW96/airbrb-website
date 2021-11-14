@@ -16,7 +16,6 @@ import React, { useEffect, useState } from 'react'
 import HouseIcon from '@material-ui/icons/House'
 import KingBedIcon from '@material-ui/icons/KingBed'
 import BathtubIcon from '@material-ui/icons/Bathtub'
-import RateReviewIcon from '@material-ui/icons/RateReview'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import RoomIcon from '@material-ui/icons/Room'
 import StarIcon from '@material-ui/icons/Star'
@@ -29,6 +28,8 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import CardBottom from '../components/CardBottom'
 import ReactPlayer from 'react-player/youtube'
+import Rating from '@material-ui/lab/Rating';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -58,6 +59,7 @@ function Listing (props) {
   const classes = useStyles()
   // getModalStyle is not a pure function, we roll the style only on the first render
   const DataOfListing = response
+  console.log(DataOfListing);
   const listingInfo = { title: '', owner: '', price: '', availability: [] }
   listingInfo.title = DataOfListing ? DataOfListing.title : ''
   listingInfo.owner = DataOfListing ? DataOfListing.owner : ''
@@ -137,8 +139,9 @@ function Listing (props) {
         : false
     : ' '
   const thumbnail = DataOfListing ? DataOfListing.thumbnail : ' '
+  const reviews = DataOfListing ? DataOfListing.reviews : ' '
   console.log(
-    hotTub + BBQ + TV + airCondition + kitchen + parking + pool + wifi
+    hotTub + BBQ + TV + airCondition + kitchen + parking + pool + wifi + reviews
   )
 
   const checkImageOrVedio = (thumbnail) => {
@@ -168,9 +171,9 @@ function Listing (props) {
             </div>
           )}
           {!checkImageOrVedio(thumbnail) && (
-            <div style={{ textAlign: 'center' }}>
+            <Grid container justifyContent='center'>
               <ReactPlayer url={thumbnail} />
-            </div>
+            </Grid>
           )}
           <CardContent>
             {/* Title */}
@@ -247,20 +250,12 @@ function Listing (props) {
                   ))}
                 </ul>
               </ListItem>
-              {/* Number of total reviews */}
-              <ListItem>
-                <ListItemIcon>
-                  <RateReviewIcon />
-                </ListItemIcon>
-                <ListItemText primary='Reviews:' />
-                <div>100这里还需要写review</div>
-              </ListItem>
               {/* SVG rating of the listing (based on user ratings) */}
               <ListItem>
                 <ListItemIcon>
                   <StarIcon />
                 </ListItemIcon>
-                <ListItemText primary='Rating of the listing:' />
+                <ListItemText primary='Average Rating of this listing:' />
                 {/* <Typography component="legend">Rating of the listing</Typography> */}
                 {/* <Rating name="read-only" value={2} readOnly /> */}
               </ListItem>
@@ -280,6 +275,30 @@ function Listing (props) {
               />
             </Grid>
           </CardActions>
+          <Divider />
+          <CardContent>
+            {/* Reviews */}
+            <Typography
+              gutterBottom
+              variant='h5'
+              component='div'
+              align='center'
+            >
+              All Reviews
+            </Typography>
+            {Object.entries(reviews).map(([key, v]) => {
+              return (
+                <ListItem key={key}>
+                  <ListItemIcon>
+                    <ThumbUpIcon />
+                  </ListItemIcon>
+                  <Rating name="read-only" value={v.socre} readOnly />
+                  <p >{v.comment}</p>
+                  <br />
+                </ListItem>
+              )
+            })}
+          </CardContent>
         </Card>
       </Grid>
     </Container>
