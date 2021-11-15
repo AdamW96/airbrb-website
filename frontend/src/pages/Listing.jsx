@@ -151,7 +151,6 @@ function Listing (props) {
   console.log(
     hotTub + BBQ + TV + airCondition + kitchen + parking + pool + wifi + reviews
   )
-
   const checkImageOrVedio = (thumbnail) => {
     return thumbnail.startsWith('data:image')
   }
@@ -180,8 +179,28 @@ function Listing (props) {
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
-  const averageScore = countAverageSocre()
 
+  const percentageScore = [0, 0, 0, 0, 0]
+  for (let i = 0; i < reviews.length; i++) {
+    switch (reviews[i].socre) {
+      case 5:
+        percentageScore[4] += 1;
+        break
+      case 4:
+        percentageScore[3] += 1;
+        break
+      case 3:
+        percentageScore[2] += 1;
+        break
+      case 2:
+        percentageScore[1] += 1;
+        break
+      case 1:
+        percentageScore[0] += 1;
+        break
+    }
+  }
+  console.log(percentageScore);
   return (
     <Container className={classes.container}>
       <Grid container justifyContent='center'>
@@ -313,13 +332,14 @@ function Listing (props) {
                 disableRestoreFocus
               >
                 <Typography>Total comments:{'   '}{reviews.length}</Typography>
-                <Typography>Five  starts:{'   '}{reviews.length}</Typography>
-                <Typography>Four  starts:{'   '}{reviews.length}</Typography>
-                <Typography>Three starts:{'   '}{reviews.length}</Typography>
-                <Typography>Two   starts:{'   '}{reviews.length}</Typography>
-                <Typography>One   starts:{'   '}{reviews.length}</Typography>
+                <ul>
+                  <li><Typography>Five  starts:{'   '}{percentageScore[4]}{'   '}({parseInt(percentageScore[4] / reviews.length * 100)}%)</Typography></li>
+                  <li><Typography>Four  starts:{'   '}{percentageScore[3]}{'   '}({parseInt(percentageScore[3] / reviews.length * 100)}%)</Typography></li>
+                  <li><Typography>Three starts:{'   '}{percentageScore[2]}{'   '}({parseInt(percentageScore[2] / reviews.length * 100)}%)</Typography></li>
+                  <li><Typography>Two   starts:{'   '}{percentageScore[1]}{'   '}({parseInt(percentageScore[1] / reviews.length * 100)}%)</Typography></li>
+                  <li><Typography>One   starts:{'   '}{percentageScore[0]}{'   '}({parseInt(percentageScore[0] / reviews.length * 100)}%)</Typography></li>
+                </ul>
               </Popover>
-                <Rating name='read-only' value={averageScore} readOnly />
               </ListItem>
             </List>
           </CardContent>
