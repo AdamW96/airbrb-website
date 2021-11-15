@@ -65,7 +65,7 @@ const getAllImage = (thumbnail) => {
   return allIMage
 }
 
-export default function HostedList (props) {
+export default function HostedLists (props) {
   const { lists, setShowAlert, setFetchData } = props
   const styles = useStyles()
   const history = useHistory()
@@ -610,7 +610,7 @@ export default function HostedList (props) {
   )
 }
 
-HostedList.propTypes = {
+HostedLists.propTypes = {
   lists: PropTypes.any,
   setShowAlert: PropTypes.any,
   setFetchData: PropTypes.any,
