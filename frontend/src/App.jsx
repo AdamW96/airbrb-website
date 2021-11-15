@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import { Switch, Route } from 'react-router-dom'
 import React from 'react'
 import Home from './pages/Home'
@@ -13,6 +11,7 @@ import AlertMsg from './components/AlertMsg'
 import Listing from './pages/Listing'
 import Requests from './pages/Requests'
 import Review from './pages/Review'
+import TotalProfit from './pages/TotalProfit'
 
 // import Leftbar from './components/Leftbar'
 // import Rightbar from './components/Rightbar'
@@ -100,6 +99,14 @@ function App () {
             setShowAlert={setShowAlert}
           />
         </Route>
+        {/* 用图表计算总盈利 */}
+        <Route path='/profit' exact>
+          <TotalProfit
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            setShowAlert={setShowAlert}
+          />
+        </Route>
       </Switch>
       <AlertMsg {...showAlert} />
     </div>
@@ -107,4 +114,3 @@ function App () {
 }
 
 export default App
->>>>>>> 9254143d142179029107191ed1a2efffcb99e9ee

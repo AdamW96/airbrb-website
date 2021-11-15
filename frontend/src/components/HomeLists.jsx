@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import {
   Card,
   Grid,
@@ -196,4 +194,3 @@ function HomeLists () {
 }
 
 export default HomeLists
->>>>>>> 9254143d142179029107191ed1a2efffcb99e9ee
