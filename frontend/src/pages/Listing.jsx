@@ -28,8 +28,8 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import CardBottom from '../components/CardBottom'
 import ReactPlayer from 'react-player/youtube'
-import Rating from '@material-ui/lab/Rating';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import Rating from '@material-ui/lab/Rating'
+import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -59,7 +59,7 @@ function Listing (props) {
   const classes = useStyles()
   // getModalStyle is not a pure function, we roll the style only on the first render
   const DataOfListing = response
-  console.log(DataOfListing);
+  console.log(DataOfListing)
   const listingInfo = { title: '', owner: '', price: '', availability: [] }
   listingInfo.title = DataOfListing ? DataOfListing.title : ''
   listingInfo.owner = DataOfListing ? DataOfListing.owner : ''
@@ -139,7 +139,7 @@ function Listing (props) {
         : false
     : ' '
   const thumbnail = DataOfListing ? DataOfListing.thumbnail : ' '
-  const reviews = DataOfListing ? DataOfListing.reviews : ' '
+  const reviews = DataOfListing ? DataOfListing.reviews : []
   console.log(
     hotTub + BBQ + TV + airCondition + kitchen + parking + pool + wifi + reviews
   )
@@ -153,17 +153,17 @@ function Listing (props) {
     allIMage.pop()
     return allIMage
   }
-  const allsocre = [];
+  const allsocre = []
   function countAverageSocre () {
     Object.entries(reviews).map(([key, v]) => {
-      allsocre.push(v.socre);
-      return (allsocre);
+      allsocre.push(v.socre)
+      return allsocre
     })
-    const sum = allsocre.reduce((a, b) => a + b, 0);
-    const avg = (sum / allsocre.length) || 0;
-    return Math.floor(avg);
+    const sum = allsocre.reduce((a, b) => a + b, 0)
+    const avg = sum / allsocre.length || 0
+    return Math.floor(avg)
   }
-  const averageScore = countAverageSocre();
+  const averageScore = countAverageSocre()
 
   return (
     <Container className={classes.container}>
@@ -268,7 +268,7 @@ function Listing (props) {
                   <StarIcon />
                 </ListItemIcon>
                 <ListItemText primary='Average Rating of this listing:' />
-                <Rating name="read-only" value={averageScore} readOnly />
+                <Rating name='read-only' value={averageScore} readOnly />
               </ListItem>
             </List>
           </CardContent>
@@ -297,14 +297,14 @@ function Listing (props) {
             >
               All Reviews
             </Typography>
-            {Object.entries(reviews).map(([key, v]) => {
+            {reviews.map((ele, index) => {
               return (
-                <ListItem key={key}>
+                <ListItem key={index}>
                   <ListItemIcon>
                     <ThumbUpIcon />
                   </ListItemIcon>
-                  <Rating name="read-only" value={v.socre} readOnly />
-                  <p >{v.comment}</p>
+                  <Rating name='read-only' value={ele.socre} readOnly />
+                  <p>{ele.comment}</p>
                   <br />
                 </ListItem>
               )
