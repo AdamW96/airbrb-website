@@ -141,6 +141,10 @@ function Navbar (props) {
     history.push('/hosted')
   }
 
+  const toTotalProfit = () => {
+    history.push('/profit')
+  }
+
   const showAlertMsg = (type, message) => {
     window.showAlert = true
     setShowAlert({ alertType: type, alertContent: message })
@@ -218,6 +222,7 @@ function Navbar (props) {
       <MenuItem
         onClick={() => {
           handleMenuClose()
+          toTotalProfit()
         }}
       >
         <Typography>My profit</Typography>

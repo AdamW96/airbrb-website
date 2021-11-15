@@ -11,6 +11,7 @@ import AlertMsg from './components/AlertMsg'
 import Listing from './pages/Listing'
 import Requests from './pages/Requests'
 import Review from './pages/Review'
+import TotalProfit from './pages/TotalProfit'
 
 // import Leftbar from './components/Leftbar'
 // import Rightbar from './components/Rightbar'
@@ -93,6 +94,14 @@ function App () {
         {/* 根据ID写review */}
         <Route path='/review/:id/:listID' exact>
           <Review
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            setShowAlert={setShowAlert}
+          />
+        </Route>
+        {/* 用图表计算总盈利 */}
+        <Route path='/profit' exact>
+          <TotalProfit
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}
