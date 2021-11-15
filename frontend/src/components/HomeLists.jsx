@@ -161,14 +161,16 @@ function HomeLists () {
 
   useEffect(() => {
     if (currentUser) {
-      fetchFunc('/bookings', 'GET').then(response => {
+      fetchFunc('/bookings', 'GET').then((response) => {
         if (response.status === 200) {
-          response.json().then(data => {
+          response.json().then((data) => {
             const booked = []
             const others = []
             for (let i = 0; i < allPublished.length; i++) {
               for (let j = 0; j < data.bookings.length; j++) {
-                if (allPublished[i].id === parseInt(data.bookings[j].listingId)) {
+                if (
+                  allPublished[i].id === parseInt(data.bookings[j].listingId)
+                ) {
                   if (data.bookings[j].owner === currentUser.email) {
                     allPublished[i].status = data.bookings[j].status
                   }
@@ -214,14 +216,38 @@ function HomeLists () {
           <Grid container name='booked' spacing={3}>
             <Grid item xs={12}>
               <Typography variant='h5'>Booked listings:</Typography>
-              {console.log(bookedList)}
             </Grid>
+            {bookedList.map((ele) => {
+              return (
+                  <ListingBody
+                    key={ele.id}
+                    id={JSON.stringify(ele.id)}
+                    title={ele.title}
+                    numReviews={ele.reviews.length}
+                    price={ele.price}
+                    thumbnail={ele.thumbnail}
+                  />
+              )
+            })}
+              {console.log(bookedList)}
           </Grid>
           <Grid container name='others' spacing={3}>
             <Grid item xs={12}>
               <Typography variant='h5'>Other listings:</Typography>
-              {console.log(otherList)}
             </Grid>
+            {otherList.map((ele) => {
+              return (
+                  <ListingBody
+                    key={ele.id}
+                    id={JSON.stringify(ele.id)}
+                    title={ele.title}
+                    numReviews={ele.reviews.length}
+                    price={ele.price}
+                    thumbnail={ele.thumbnail}
+                  />
+              )
+            })}
+              {console.log(otherList)}
           </Grid>
         </div>
       )}
