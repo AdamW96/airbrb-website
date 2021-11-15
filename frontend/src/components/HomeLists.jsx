@@ -53,7 +53,7 @@ function ListingBody ({ id, title, numReviews, price, thumbnail }) {
     history.push(location)
   }
   return (
-    <div>
+    <Grid item xs={12} sm={4}>
       <Card sx={{ maxWidth: 345 }} onClick={goListingPage}>
         {checkImageOrVedio(thumbnail) && (
           <div className={classes.root}>
@@ -88,13 +88,8 @@ function ListingBody ({ id, title, numReviews, price, thumbnail }) {
             <b>🔹 Price:{'  '}</b>${price}
           </Typography>
         </CardContent>
-        {/* <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
       </Card>
-      <br />
-    </div>
+    </Grid>
   )
 }
 ListingBody.propTypes = {
@@ -102,7 +97,17 @@ ListingBody.propTypes = {
   numReviews: PropTypes.number.isRequired,
   price: PropTypes.string.isRequired,
   thumbnail: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
+}
+
+const compare = (a, b) => {
+  if (a.title.toLowerCase() < b.title.toLowerCase()) {
+    return -1
+  }
+  if (a.title.toLowerCase() > b.title.toLowerCase()) {
+    return 1
+  }
+  return 0
 }
 
 const useFetch = () => {
@@ -121,24 +126,23 @@ const useFetch = () => {
   useEffect(() => {
     const pbList = []
     let index = 0
-    console.log(allLists)
     for (let i = 0; i < allLists.length; i++) {
       fetchFunc(`/listings/${allLists[i].id}`, 'GET').then((response) => {
         if (response.status === 200) {
           response.json().then((data) => {
-            console.log(data)
             index += 1
             if (data.listing.published) {
               pbList.push(allLists[i])
             }
-            console.log(pbList, index, response.length)
             if (index === allLists.length) {
+              pbList.sort(compare)
               setPublished(pbList)
             }
           })
         } else {
           index += 1
           if (index === allLists.length) {
+            pbList.sort(compare)
             setPublished(pbList)
           }
         }
@@ -146,47 +150,79 @@ const useFetch = () => {
     }
   }, [allLists])
 
-  useEffect(() => {
-    console.log(publishedList)
-  }, [publishedList])
-
   return publishedList
 }
 
-const compare = (a, b) => {
-  if (a.title.toLowerCase() < b.title.toLowerCase()) {
-    return -1
-  }
-  if (a.title.toLowerCase() > b.title.toLowerCase()) {
-    return 1
-  }
-  return 0
-}
-
 function HomeLists () {
-  const allListings = useFetch()
-  console.log('all==>', allListings)
-  if (allListings.length !== 0) {
-    allListings.sort(compare)
-  }
-  console.log('alllisngs', allListings)
+  const allPublished = useFetch()
+  const [bookedList, setBookedList] = useState([])
+  const [otherList, setOtherList] = useState([])
+  const currentUser = JSON.parse(localStorage.getItem('user'))
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchFunc('/bookings', 'GET').then(response => {
+        if (response.status === 200) {
+          response.json().then(data => {
+            const booked = []
+            const others = []
+            for (let i = 0; i < allPublished.length; i++) {
+              for (let j = 0; j < data.bookings.length; j++) {
+                if (allPublished[i].id === parseInt(data.bookings[j].listingId)) {
+                  if (data.bookings[j].owner === currentUser.email) {
+                    allPublished[i].status = data.bookings[j].status
+                  }
+                }
+              }
+            }
+            for (let i = 0; i < allPublished.length; i++) {
+              if (allPublished[i].status) {
+                booked.push(allPublished[i])
+              } else {
+                others.push(allPublished[i])
+              }
+            }
+            setBookedList(booked)
+            setOtherList(others)
+          })
+        }
+      })
+    }
+  }, [allPublished])
+
   return (
     <React.Fragment>
-      {allListings.length === 0 && <h1>No data ... </h1>}
-      {allListings.length !== 0 && (
-        <div id='body1'>
-          {Object.keys(allListings).map(function (key) {
+      {allPublished.length === 0 && <h1>No data ... </h1>}
+      {allPublished.length !== 0 && !currentUser && (
+        <Grid container id='body1' spacing={3}>
+          {Object.keys(allPublished).map(function (key) {
             return (
               <ListingBody
-                key={allListings[key].id}
-                id={JSON.stringify(allListings[key].id)}
-                title={allListings[key].title}
-                numReviews={allListings[key].reviews.length}
-                price={allListings[key].price}
-                thumbnail={allListings[key].thumbnail}
+                key={allPublished[key].id}
+                id={JSON.stringify(allPublished[key].id)}
+                title={allPublished[key].title}
+                numReviews={allPublished[key].reviews.length}
+                price={allPublished[key].price}
+                thumbnail={allPublished[key].thumbnail}
               />
             )
           })}
+        </Grid>
+      )}
+      {allPublished.length !== 0 && currentUser && (
+        <div>
+          <Grid container name='booked' spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant='h5'>Booked listings:</Typography>
+              {console.log(bookedList)}
+            </Grid>
+          </Grid>
+          <Grid container name='others' spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant='h5'>Other listings:</Typography>
+              {console.log(otherList)}
+            </Grid>
+          </Grid>
         </div>
       )}
     </React.Fragment>
