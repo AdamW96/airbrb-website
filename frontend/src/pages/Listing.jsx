@@ -11,6 +11,7 @@ import {
   Divider,
   ImageList,
   ImageListItem,
+  Popover,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import HouseIcon from '@material-ui/icons/House'
@@ -35,7 +36,14 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(10),
   },
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing(1),
+  },
 }))
+
 Listing.propTypes = {
   props: PropTypes.any,
   setShowAlert: PropTypes.any,
@@ -164,6 +172,14 @@ function Listing (props) {
     return Math.floor(avg);
   }
   const averageScore = countAverageSocre();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
 
   return (
     <Container className={classes.container}>
@@ -268,7 +284,40 @@ function Listing (props) {
                   <StarIcon />
                 </ListItemIcon>
                 <ListItemText primary='Average Rating of this listing:' />
-                <Rating name="read-only" value={averageScore} readOnly />
+                <Typography
+                  aria-owns={open ? 'mouse-over-popover' : undefined}
+                  aria-haspopup="true"
+                  onMouseEnter={handlePopoverOpen}
+                  onMouseLeave={handlePopoverClose}
+                >
+                  <Rating name="read-onlylal" value={averageScore} readOnly />
+                </Typography>
+                <Popover
+                id="mouse-over-popover"
+                className={classes.popover}
+                classes={{
+                  paper: classes.paper,
+                }}
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+              >
+                <Typography>Total comments:{'   '}{reviews.length}</Typography>
+                <Typography>Five  starts:{'   '}{reviews.length}</Typography>
+                <Typography>Four  starts:{'   '}{reviews.length}</Typography>
+                <Typography>Three starts:{'   '}{reviews.length}</Typography>
+                <Typography>Two   starts:{'   '}{reviews.length}</Typography>
+                <Typography>One   starts:{'   '}{reviews.length}</Typography>
+              </Popover>
               </ListItem>
             </List>
           </CardContent>
