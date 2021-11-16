@@ -14,12 +14,10 @@ export default function UploadFile () {
       console.log(event.target.result);
       const obj = JSON.parse(event.target.result);
       setFiles(obj);
-      console.log(obj);
     }
     const fileReader = new FileReader();
     fileReader.onload = onReaderLoad;
     fileReader.readAsText(event.target.files[0], 'UTF-8');
-    console.log(fileReader);
   };
   const handleSubmission = () => {
     fetchFunc('/listings/new', 'POST', jsonfiles)
