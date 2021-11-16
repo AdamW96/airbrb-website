@@ -1,0 +1,27 @@
+{
+  "title": "Xincheng is beautiful",
+  "address": {
+    "street": "11 Snape St",
+    "city": "MAROUBRA",
+    "state": "NSW",
+    "postcode": "2035",
+    "country": "澳大利亚"
+  },
+  "price": "222",
+  "thumbnail": "https://www.youtube.com/embed/tgbNymZ7vqY",
+  "metadata": {
+    "entirePlace": false,
+    "privateRoom": false,
+    "shareRoom": true,
+    "bedRooms": [],
+    "bathRoomNumber": "2",
+    "pool": true,
+    "BBQ": true,
+    "parking": true,
+    "airCondition": true,
+    "wifi": false,
+    "TV": false,
+    "kitchen": false,
+    "hotTub": false
+  }
+}

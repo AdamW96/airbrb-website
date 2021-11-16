@@ -145,6 +145,10 @@ function Navbar (props) {
     history.push('/profit')
   }
 
+  const toUploadFile = () => {
+    history.push('/uploadfile')
+  }
+
   const showAlertMsg = (type, message) => {
     window.showAlert = true
     setShowAlert({ alertType: type, alertContent: message })
@@ -200,17 +204,18 @@ function Navbar (props) {
       <MenuItem
         onClick={() => {
           handleMenuClose()
-          toHosted()
+          toUploadFile()
         }}
       >
-        <Typography>Hosted lists</Typography>
+        <Typography>Create new list by upload json file</Typography>
       </MenuItem>
       <MenuItem
         onClick={() => {
           handleMenuClose()
+          toHosted()
         }}
       >
-        <Typography>Book lists</Typography>
+        <Typography>Hosted lists</Typography>
       </MenuItem>
       <MenuItem
         onClick={() => {
