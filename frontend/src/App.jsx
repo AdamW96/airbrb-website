@@ -12,6 +12,7 @@ import Listing from './pages/Listing'
 import Requests from './pages/Requests'
 import Review from './pages/Review'
 import TotalProfit from './pages/TotalProfit'
+import UploadFile from './pages/UploadFile'
 
 // import Leftbar from './components/Leftbar'
 // import Rightbar from './components/Rightbar'
@@ -102,6 +103,14 @@ function App () {
         {/* 用图表计算总盈利 */}
         <Route path='/profit' exact>
           <TotalProfit
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            setShowAlert={setShowAlert}
+          />
+        </Route>
+        {/* 上传json文件来创建新房源 */}
+        <Route path='/uploadfile' exact>
+          <UploadFile
             currentUser={currentUser}
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}
