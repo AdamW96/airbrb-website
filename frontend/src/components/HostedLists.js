@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     position: 'absolute',
-    width: 400,
+    width: 300,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -147,6 +147,7 @@ export default function HostedLists (props) {
     }
     // change the date from date time to second time
     const startSeconds = startTime.setHours(0, 0, 0, 0)
+    // console.log(startSeconds)
     const endSeconds = endTime.setHours(0, 0, 0, 0)
     if (startSeconds > endSeconds) {
       showAlertMsg('error', 'Start date must earler than end date')
