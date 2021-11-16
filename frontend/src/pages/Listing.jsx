@@ -11,7 +11,7 @@ import {
   Divider,
   ImageList,
   ImageListItem,
-  Popover,
+  Button,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import HouseIcon from '@material-ui/icons/House'
@@ -23,7 +23,6 @@ import StarIcon from '@material-ui/icons/Star'
 import HotelIcon from '@material-ui/icons/Hotel'
 import OutdoorGrillIcon from '@material-ui/icons/OutdoorGrill'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
 import fetchFunc from '../services/fetchService'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
@@ -31,7 +30,22 @@ import CardBottom from '../components/CardBottom'
 import ReactPlayer from 'react-player/youtube'
 import Rating from '@material-ui/lab/Rating'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
+import Modal from '@material-ui/core/Modal';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 
+function rand () {
+  return Math.round(Math.random() * 20) - 10;
+}
+function getModalStyle () {
+  const top = 50 + rand();
+  const left = 50 + rand();
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(10),
@@ -41,6 +55,14 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(1),
+  },
+  paperModal: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
 }))
 
@@ -171,36 +193,134 @@ function Listing (props) {
     return Math.floor(avg)
   }
   const averageScore = countAverageSocre();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-  const open = Boolean(anchorEl);
+
+  const HtmlTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+  }))(Tooltip);
 
   const percentageScore = [0, 0, 0, 0, 0]
+  const classifiedByNumStars = [[], [], [], [], []]
   for (let i = 0; i < reviews.length; i++) {
     switch (reviews[i].socre) {
       case 5:
         percentageScore[4] += 1;
+        classifiedByNumStars[4].push(reviews[i]);
         break
       case 4:
         percentageScore[3] += 1;
+        classifiedByNumStars[3].push(reviews[i]);
         break
       case 3:
         percentageScore[2] += 1;
+        classifiedByNumStars[2].push(reviews[i]);
         break
       case 2:
         percentageScore[1] += 1;
+        classifiedByNumStars[1].push(reviews[i]);
         break
       case 1:
         percentageScore[0] += 1;
+        classifiedByNumStars[0].push(reviews[i]);
         break
     }
   }
-  console.log(percentageScore);
+  const [modalStyle] = React.useState(getModalStyle);
+  const [openFive, setOpenFive] = React.useState(false);
+  const handleOpenFive = () => { setOpenFive(true); };
+  const handleCloseFive = () => { setOpenFive(false); };
+
+  const [openFour, setOpenFour] = React.useState(false);
+  const handleOpenFour = () => { setOpenFour(true); };
+  const handleCloseFour = () => { setOpenFour(false); };
+
+  const [openThree, setOpenThree] = React.useState(false);
+  const handleOpenThree = () => { setOpenThree(true); };
+  const handleCloseThree = () => { setOpenThree(false); };
+
+  const [openTwo, setOpenTwo] = React.useState(false);
+  const handleOpenTwo = () => { setOpenTwo(true); };
+  const handleCloseTwo = () => { setOpenTwo(false); };
+
+  const [openOne, setOpenOne] = React.useState(false);
+  const handleOpenOne = () => { setOpenOne(true); };
+  const handleCloseOne = () => { setOpenOne(false); };
+
+  const bodyFiveStars = (
+    <div style={modalStyle} className={classes.paperModal}>
+      <h2 id="simple-modal-title">All comments with 5 Stars</h2>
+      {classifiedByNumStars[4].map((ele, index) => {
+        return (
+          <ListItem key={index}>
+            <Rating name='read-only' value={ele.socre} readOnly />
+            <p>{ele.comment}</p>
+            <br />
+          </ListItem>
+        )
+      })}
+    </div>
+  );
+  const bodyFourStars = (
+    <div style={modalStyle} className={classes.paperModal}>
+      <h2 id="simple-modal-title">All comments with 4 Stars</h2>
+      {classifiedByNumStars[3].map((ele, index) => {
+        return (
+          <ListItem key={index}>
+            <Rating name='read-only' value={ele.socre} readOnly />
+            <p>{ele.comment}</p>
+            <br />
+          </ListItem>
+        )
+      })}
+    </div>
+  );
+  const bodyThreeStars = (
+    <div style={modalStyle} className={classes.paperModal}>
+      <h2 id="simple-modal-title">All comments with 3 Stars</h2>
+      {classifiedByNumStars[2].map((ele, index) => {
+        return (
+          <ListItem key={index}>
+            <Rating name='read-only' value={ele.socre} readOnly />
+            <p>{ele.comment}</p>
+            <br />
+          </ListItem>
+        )
+      })}
+    </div>
+  );
+  const bodyTwoStars = (
+    <div style={modalStyle} className={classes.paperModal}>
+      <h2 id="simple-modal-title">All comments with 2 Stars</h2>
+      {classifiedByNumStars[1].map((ele, index) => {
+        return (
+          <ListItem key={index}>
+            <Rating name='read-only' value={ele.socre} readOnly />
+            <p>{ele.comment}</p>
+            <br />
+          </ListItem>
+        )
+      })}
+    </div>
+  );
+  const bodyOneStars = (
+    <div style={modalStyle} className={classes.paperModal}>
+      <h2 id="simple-modal-title">All comments with 1 Stars</h2>
+      {classifiedByNumStars[0].map((ele, index) => {
+        return (
+          <ListItem key={index}>
+            <Rating name='read-only' value={ele.socre} readOnly />
+            <p>{ele.comment}</p>
+            <br />
+          </ListItem>
+        )
+      })}
+    </div>
+  );
   return (
     <Container className={classes.container}>
       <Grid container justifyContent='center'>
@@ -304,42 +424,65 @@ function Listing (props) {
                   <StarIcon />
                 </ListItemIcon>
                 <ListItemText primary='Average Rating of this listing:' />
-                <Typography
-                  aria-owns={open ? 'mouse-over-popover' : undefined}
-                  aria-haspopup="true"
-                  onMouseEnter={handlePopoverOpen}
-                  onMouseLeave={handlePopoverClose}
+                <Modal
+                  open={openFive}
+                  onClose={handleCloseFive}
+                  aria-labelledby="simple-modal-title"
+                  aria-describedby="simple-modal-description"
                 >
-                  <Rating name="read-onlylal" value={averageScore} readOnly />
-                </Typography>
-                <Popover
-                id="mouse-over-popover"
-                className={classes.popover}
-                classes={{
-                  paper: classes.paper,
-                }}
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-              >
-                <Typography>Total comments:{'   '}{reviews.length}</Typography>
-                <ul>
-                  <li><Typography>Five  starts:{'   '}{percentageScore[4]}{'   '}({parseInt(percentageScore[4] / reviews.length * 100)}%)</Typography></li>
-                  <li><Typography>Four  starts:{'   '}{percentageScore[3]}{'   '}({parseInt(percentageScore[3] / reviews.length * 100)}%)</Typography></li>
-                  <li><Typography>Three starts:{'   '}{percentageScore[2]}{'   '}({parseInt(percentageScore[2] / reviews.length * 100)}%)</Typography></li>
-                  <li><Typography>Two   starts:{'   '}{percentageScore[1]}{'   '}({parseInt(percentageScore[1] / reviews.length * 100)}%)</Typography></li>
-                  <li><Typography>One   starts:{'   '}{percentageScore[0]}{'   '}({parseInt(percentageScore[0] / reviews.length * 100)}%)</Typography></li>
-                </ul>
-              </Popover>
+                  {bodyFiveStars}
+                </Modal>
+                <Modal
+                    open={openFour}
+                    onClose={handleCloseFour}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                  >
+                    {bodyFourStars}
+                  </Modal>
+                  <Modal
+                    open={openThree}
+                    onClose={handleCloseThree}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                  >
+                    {bodyThreeStars}
+                  </Modal>
+                  <Modal
+                    open={openTwo}
+                    onClose={handleCloseTwo}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                  >
+                    {bodyTwoStars}
+                  </Modal>
+                  <Modal
+                    open={openOne}
+                    onClose={handleCloseOne}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                  >
+                    {bodyOneStars}
+                  </Modal>
+                <HtmlTooltip
+                  title={
+                    <React.Fragment>
+                      <>
+                      <Typography>Total comments:{'   '}{reviews.length}</Typography>
+                      <ul>
+                        <li onClick={handleOpenFive}><Typography>Five  starts:{'   '}{percentageScore[4]}{'   '}({parseInt(percentageScore[4] / reviews.length * 100)}%)</Typography></li>
+                        <li onClick={handleOpenFour}><Typography>Four  starts:{'   '}{percentageScore[3]}{'   '}({parseInt(percentageScore[3] / reviews.length * 100)}%)</Typography></li>
+                        <li onClick={handleOpenThree}><Typography>Three starts:{'   '}{percentageScore[2]}{'   '}({parseInt(percentageScore[2] / reviews.length * 100)}%)</Typography></li>
+                        <li onClick={handleOpenTwo}><Typography>Two   starts:{'   '}{percentageScore[1]}{'   '}({parseInt(percentageScore[1] / reviews.length * 100)}%)</Typography></li>
+                        <li onClick={handleOpenOne}><Typography>One   starts:{'   '}{percentageScore[0]}{'   '}({parseInt(percentageScore[0] / reviews.length * 100)}%)</Typography></li>
+                      </ul>
+                      </>
+                    </React.Fragment>
+                  }
+                  interactive
+                >
+                  <Button><Rating name="read-onlylal" value={averageScore} readOnly /></Button>
+                </HtmlTooltip>
               </ListItem>
             </List>
           </CardContent>
