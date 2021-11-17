@@ -6,16 +6,16 @@ import Adapter from 'enzyme-adapter-react-16';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 describe('<Login />', () => {
   const wrapper = shallow(<Login />);
   const textFieldMUI = wrapper.find(TextField);
   it('Has a login button', () => {
     const wrapper = shallow(<Login/>);
-    expect(wrapper.containsMatchingElement(<Button type="submit">Sign In</Button>)).to.be.true;
+    expect(wrapper.containsMatchingElement( <Button type="submit">Sign In</Button> )).to.be.true;
   });
   it('Another way for testing login button', () => {
-    wrapper.find({children: "Sign In"})
+    wrapper.find({ children: 'Sign In' })
   });
   it('TextField component should exists.', () => {
     expect(textFieldMUI).to.exist;

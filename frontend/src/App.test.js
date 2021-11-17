@@ -17,7 +17,7 @@ import Review from './pages/Review'
 import TotalProfit from './pages/TotalProfit'
 import UploadFile from './pages/UploadFile'
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 const wrapper = shallow(<APP />);
 let pathMap = {};
 beforeAll(() => {
