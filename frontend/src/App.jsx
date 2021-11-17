@@ -14,15 +14,7 @@ import Review from './pages/Review'
 import TotalProfit from './pages/TotalProfit'
 import UploadFile from './pages/UploadFile'
 import SearchRes from './pages/SearchRes'
-<<<<<<< HEAD
-=======
 
-// import Leftbar from './components/Leftbar'
-// import Rightbar from './components/Rightbar'
-// import AddNew from './components/AddNew'
->>>>>>> 8603aca4d29827414ec3582b98a3377276b4ec5e
-
-// inital global part
 function App () {
   const [currentUser, setCurrentUser] = React.useState(
     JSON.parse(localStorage.getItem('user'))
