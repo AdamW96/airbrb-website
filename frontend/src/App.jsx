@@ -13,6 +13,7 @@ import Requests from './pages/Requests'
 import Review from './pages/Review'
 import TotalProfit from './pages/TotalProfit'
 import UploadFile from './pages/UploadFile'
+import SearchRes from './pages/SearchRes'
 
 // import Leftbar from './components/Leftbar'
 // import Rightbar from './components/Rightbar'
@@ -23,6 +24,7 @@ function App () {
   const [currentUser, setCurrentUser] = React.useState(
     JSON.parse(localStorage.getItem('user'))
   )
+  const [searchResList, setSearchResList] = React.useState([])
   const [showAlert, setShowAlert] = React.useState({
     alertType: 'none',
     alertContent: '',
@@ -33,6 +35,7 @@ function App () {
         currentUser={currentUser}
         setCurrentUser={setCurrentUser}
         setShowAlert={setShowAlert}
+        setSearchResList={setSearchResList}
       />
       <Switch>
         <Route path='/' exact>
@@ -115,6 +118,9 @@ function App () {
             setCurrentUser={setCurrentUser}
             setShowAlert={setShowAlert}
           />
+        </Route>
+        <Route path='/searchResult' exact>
+          <SearchRes searchResList={searchResList}/>
         </Route>
       </Switch>
       <AlertMsg {...showAlert} />
