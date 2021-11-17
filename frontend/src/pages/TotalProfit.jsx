@@ -56,11 +56,12 @@ function TotalProfit (props) {
             const secondGap = data.bookings[i].dateRange.end - data.bookings[i].dateRange.start;
             const days = Math.floor(secondGap / (24 * 3600 * 1000)) + 1;
             const oneDayPrice = Math.floor(data.bookings[i].totalPrice / days);
-            if (data.bookings[i].dateRange.end > todaySecondsStyle && data.bookings[i].dateRange.start < todaySecondsStyle) {
+            if (data.bookings[i].dateRange.end > todaySecondsStyle && data.bookings[i].dateRange.start < todaySecondsStyle && data.bookings[i].dateRange.start > thirtyDaysAgoSecondsStyle) {
               const endDay = new Date(changeSecocndToDate(Date.now()));
               const startDay = new Date(changeSecocndToDate(data.bookings[i].dateRange.start));
               const gapBetweenToday = (endDay.getTime() - startDay.getTime()) / (1000 * 3600 * 24);
               for (let i = dailyProfit.length - 1 - gapBetweenToday; i < dailyProfit.length; i++) {
+                console.log(i, listingID, gapBetweenToday, endDay, startDay);
                 dailyProfit[i].push(oneDayPrice);
               }
             } else if (data.bookings[i].dateRange.start < thirtyDaysAgoSecondsStyle && data.bookings[i].dateRange.end > thirtyDaysAgoSecondsStyle) {

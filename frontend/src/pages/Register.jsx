@@ -39,10 +39,10 @@ const checkValidName = (name) => {
   const regName = /[a-zA-Z]{2,20}/
   return regName.test(name)
 }
-// const checkStrongPassword = (password) => {
-//   const rePassword = /(?=.*[a-z])(?=.*[A-Z])/
-//   return rePassword.test(password)
-// }
+const checkStrongPassword = (password) => {
+  const rePassword = /(?=.*[a-z])(?=.*[A-Z])/
+  return rePassword.test(password)
+}
 
 const registerFunction = (email, password, confirmPwd, name, showAlertMsg, history, setCurrentUser) => {
   if (!checkValidName(name)) {
@@ -50,6 +50,9 @@ const registerFunction = (email, password, confirmPwd, name, showAlertMsg, histo
     return
   } else if (!checkValidEmail(email)) {
     showAlertMsg('error', 'Please input valid email')
+    return
+  } else if (!checkStrongPassword(password)) {
+    showAlertMsg('error', 'Please input strong password, with one One upper case and one lower case at least 8 characters')
     return
   }
   if (password !== confirmPwd) {

@@ -117,6 +117,7 @@ const useFetch = () => {
         return
       }
       response.json().then((data) => {
+        console.log(data);
         setAllLists(data.listings)
       })
     })

@@ -470,11 +470,11 @@ function Listing (props) {
                       <>
                       <Typography>Total comments:{'   '}{reviews.length}</Typography>
                       <ul>
-                        <li onClick={handleOpenFive}><Typography>Five  starts:{'   '}{percentageScore[4]}{'   '}({parseInt(percentageScore[4] / reviews.length * 100)}%)</Typography></li>
-                        <li onClick={handleOpenFour}><Typography>Four  starts:{'   '}{percentageScore[3]}{'   '}({parseInt(percentageScore[3] / reviews.length * 100)}%)</Typography></li>
-                        <li onClick={handleOpenThree}><Typography>Three starts:{'   '}{percentageScore[2]}{'   '}({parseInt(percentageScore[2] / reviews.length * 100)}%)</Typography></li>
-                        <li onClick={handleOpenTwo}><Typography>Two   starts:{'   '}{percentageScore[1]}{'   '}({parseInt(percentageScore[1] / reviews.length * 100)}%)</Typography></li>
-                        <li onClick={handleOpenOne}><Typography>One   starts:{'   '}{percentageScore[0]}{'   '}({parseInt(percentageScore[0] / reviews.length * 100)}%)</Typography></li>
+                        <li onClick={handleOpenFive}><Typography>Five  starts:{'   '}{percentageScore[4]}{'   '}({parseInt(percentageScore[4] / reviews.length * 100) ? parseInt(percentageScore[4] / reviews.length * 100) + '%' : 'no comments' })</Typography></li>
+                        <li onClick={handleOpenFour}><Typography>Four  starts:{'   '}{percentageScore[3]}{'   '}({parseInt(percentageScore[3] / reviews.length * 100) ? parseInt(percentageScore[3] / reviews.length * 100) + '%' : 'no comments' })</Typography></li>
+                        <li onClick={handleOpenThree}><Typography>Three starts:{'   '}{percentageScore[2]}{'   '}({parseInt(percentageScore[2] / reviews.length * 100) ? parseInt(percentageScore[2] / reviews.length * 100) + '%' : 'no comments' })</Typography></li>
+                        <li onClick={handleOpenTwo}><Typography>Two   starts:{'   '}{percentageScore[1]}{'   '}({parseInt(percentageScore[1] / reviews.length * 100) ? parseInt(percentageScore[1] / reviews.length * 100) + '%' : 'no comments' })</Typography></li>
+                        <li onClick={handleOpenOne}><Typography>One   starts:{'   '}{percentageScore[0]}{'   '}({parseInt(percentageScore[0] / reviews.length * 100) ? parseInt(percentageScore[0] / reviews.length * 100) + '%' : 'no comments' })</Typography></li>
                       </ul>
                       </>
                     </React.Fragment>

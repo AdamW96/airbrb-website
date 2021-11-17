@@ -187,13 +187,6 @@ function Navbar (props) {
       <MenuItem
         onClick={() => {
           handleMenuClose()
-        }}
-      >
-        <Typography>Messages</Typography>
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          handleMenuClose()
           toTotalProfit()
         }}
       >
