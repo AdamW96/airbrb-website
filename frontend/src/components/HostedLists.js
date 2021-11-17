@@ -53,6 +53,18 @@ const useStyles = makeStyles((theme) => ({
   boldFont: {
     fontWeight: 'bold',
   },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  imageList: {
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
 }))
 
 const checkImageOrVedio = (thumbnail) => {
@@ -337,7 +349,7 @@ export default function HostedLists (props) {
                     </div>
                   )}
                   {!checkImageOrVedio(ele.thumbnail) && (
-                    <div style={{ textAlign: 'center' }}>
+                    <div style={{ justifyContent: 'center' }}>
                       <ReactPlayer url={ele.thumbnail} />
                     </div>
                   )}
@@ -415,7 +427,7 @@ export default function HostedLists (props) {
                       </Grid>
                     </Grid>
                     <Grid container className={styles.gridContainer}>
-                      <Grid item>{'Total reviews'}</Grid>
+                      <Grid item>{`Total reviews: ${ele.reviews.length}`}</Grid>
                     </Grid>
                     <Grid container className={styles.gridContainer}>
                       <Grid item xs={12}>

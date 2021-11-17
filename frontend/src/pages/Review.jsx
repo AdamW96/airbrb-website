@@ -40,7 +40,7 @@ export default function Review () {
   const [commentValue, setComment] = React.useState('');
   const reviewData = {
     review: {
-      socre: scoreValue,
+      score: scoreValue,
       comment: commentValue,
     }
   }

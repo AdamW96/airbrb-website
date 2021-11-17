@@ -182,17 +182,17 @@ function Listing (props) {
     allIMage.pop()
     return allIMage
   }
-  const allsocre = []
-  function countAverageSocre () {
+  const allscore = []
+  function countAveragescore () {
     Object.entries(reviews).map(([key, v]) => {
-      allsocre.push(v.socre)
-      return allsocre
+      allscore.push(v.score)
+      return allscore
     })
-    const sum = allsocre.reduce((a, b) => a + b, 0)
-    const avg = sum / allsocre.length || 0
+    const sum = allscore.reduce((a, b) => a + b, 0)
+    const avg = sum / allscore.length || 0
     return Math.floor(avg)
   }
-  const averageScore = countAverageSocre();
+  const averageScore = countAveragescore();
 
   const HtmlTooltip = withStyles((theme) => ({
     tooltip: {
@@ -207,7 +207,7 @@ function Listing (props) {
   const percentageScore = [0, 0, 0, 0, 0]
   const classifiedByNumStars = [[], [], [], [], []]
   for (let i = 0; i < reviews.length; i++) {
-    switch (reviews[i].socre) {
+    switch (reviews[i].score) {
       case 5:
         percentageScore[4] += 1;
         classifiedByNumStars[4].push(reviews[i]);
@@ -257,7 +257,7 @@ function Listing (props) {
       {classifiedByNumStars[4].map((ele, index) => {
         return (
           <ListItem key={index}>
-            <Rating name='read-only' value={ele.socre} readOnly />
+            <Rating name='read-only' value={ele.score} readOnly />
             <p>{ele.comment}</p>
             <br />
           </ListItem>
@@ -271,7 +271,7 @@ function Listing (props) {
       {classifiedByNumStars[3].map((ele, index) => {
         return (
           <ListItem key={index}>
-            <Rating name='read-only' value={ele.socre} readOnly />
+            <Rating name='read-only' value={ele.score} readOnly />
             <p>{ele.comment}</p>
             <br />
           </ListItem>
@@ -285,7 +285,7 @@ function Listing (props) {
       {classifiedByNumStars[2].map((ele, index) => {
         return (
           <ListItem key={index}>
-            <Rating name='read-only' value={ele.socre} readOnly />
+            <Rating name='read-only' value={ele.score} readOnly />
             <p>{ele.comment}</p>
             <br />
           </ListItem>
@@ -299,7 +299,7 @@ function Listing (props) {
       {classifiedByNumStars[1].map((ele, index) => {
         return (
           <ListItem key={index}>
-            <Rating name='read-only' value={ele.socre} readOnly />
+            <Rating name='read-only' value={ele.score} readOnly />
             <p>{ele.comment}</p>
             <br />
           </ListItem>
@@ -313,7 +313,7 @@ function Listing (props) {
       {classifiedByNumStars[0].map((ele, index) => {
         return (
           <ListItem key={index}>
-            <Rating name='read-only' value={ele.socre} readOnly />
+            <Rating name='read-only' value={ele.score} readOnly />
             <p>{ele.comment}</p>
             <br />
           </ListItem>
@@ -517,7 +517,7 @@ function Listing (props) {
                   <ListItemIcon>
                     <ThumbUpIcon />
                   </ListItemIcon>
-                  <Rating name='read-only' value={ele.socre} readOnly />
+                  <Rating name='read-only' value={ele.score} readOnly />
                   <p>{ele.comment}</p>
                   <br />
                 </ListItem>

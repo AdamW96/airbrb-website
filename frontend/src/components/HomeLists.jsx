@@ -69,11 +69,9 @@ function ListingBody ({ id, title, numReviews, price, thumbnail }) {
           </div>
         )}
         {!checkImageOrVedio(thumbnail) && (
-          <Grid container>
             <Grid container justifyContent='center'>
               <ReactPlayer url={thumbnail} />
             </Grid>
-          </Grid>
         )}
         <CardContent>
           <Typography variant='body2' color='textSecondary' align='center'>
