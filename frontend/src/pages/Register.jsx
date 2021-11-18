@@ -3,6 +3,14 @@ import { useHistory } from 'react-router'
 import fetchFunc from '../services/fetchService'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  FormHelperText,
+  Container,
+  makeStyles,
+} from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import Link from '@material-ui/core/Link'
@@ -11,7 +19,6 @@ import Box from '@material-ui/core/Box'
 import LockOutlinedIcon from '@material-ui/icons//LockOutlined'
 import Typography from '@material-ui/core/Typography'
 // import { createTheme, ThemeProvider } from '@material-ui/core/styles'
-import { Container, makeStyles } from '@material-ui/core'
 import PropTypes from 'prop-types'
 
 const useStyle = makeStyles((theme) => ({
@@ -44,7 +51,15 @@ const checkStrongPassword = (password) => {
   return rePassword.test(password)
 }
 
-const registerFunction = (email, password, confirmPwd, name, showAlertMsg, history, setCurrentUser) => {
+const registerFunction = (
+  email,
+  password,
+  confirmPwd,
+  name,
+  showAlertMsg,
+  history,
+  setCurrentUser
+) => {
   if (!checkValidName(name)) {
     showAlertMsg('error', 'input valid name')
     return
@@ -52,7 +67,10 @@ const registerFunction = (email, password, confirmPwd, name, showAlertMsg, histo
     showAlertMsg('error', 'Please input valid email')
     return
   } else if (!checkStrongPassword(password)) {
-    showAlertMsg('error', 'Please input strong password, with one One upper case and one lower case at least 8 characters')
+    showAlertMsg(
+      'error',
+      'Please input strong password, with one One upper case and one lower case at least 8 characters'
+    )
     return
   }
   if (password !== confirmPwd) {
@@ -65,9 +83,10 @@ const registerFunction = (email, password, confirmPwd, name, showAlertMsg, histo
       showAlertMsg('error', 'This email has been used, change a new one')
       return
     }
-    response.json().then(data => {
+    response.json().then((data) => {
       showAlertMsg('success', 'Register successfully')
-      localStorage.setItem('user', JSON.stringify(data))
+      const userData = { token: data.token, email: email }
+      localStorage.setItem('user', JSON.stringify(userData))
       setCurrentUser(JSON.parse(localStorage.getItem('user')))
       history.push('/')
     })
@@ -159,7 +178,7 @@ export default function Register (props) {
                 id='firstName'
                 label='First Name'
                 autoFocus
-                onChange = {handleFirstName}
+                onChange={handleFirstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -170,7 +189,7 @@ export default function Register (props) {
                 label='Last Name'
                 name='lastName'
                 autoComplete='family-name'
-                onChange = {handleLastName}
+                onChange={handleLastName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -181,20 +200,29 @@ export default function Register (props) {
                 label='Email Address'
                 name='email'
                 autoComplete='email'
-                onChange = {handleEmail}
+                onChange={handleEmail}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name='password'
-                label='Password'
-                type='password'
-                id='password'
-                autoComplete='new-password'
-                onChange = {handlePassword}
-              />
+              <FormControl>
+                <InputLabel htmlFor='component-helper'>Password</InputLabel>
+                <Input
+                  required
+                  type='password'
+                  id='password'
+                  name='password'
+                  value = {password}
+                  onChange={handlePassword}
+                  aria-describedby='component-helper-text'
+                />
+                <FormHelperText
+                  id='component-helper-text'
+                  style={{ color: 'red' }}
+                >
+                  Password must with one One upper case and one lower case at
+                  least 8 characters
+                </FormHelperText>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -205,7 +233,7 @@ export default function Register (props) {
                 type='password'
                 id='confirmPassword'
                 autoComplete='new-password'
-                onChange = {handleConfirmPassword}
+                onChange={handleConfirmPassword}
               />
             </Grid>
           </Grid>
@@ -216,7 +244,7 @@ export default function Register (props) {
             variant='contained'
             color='primary'
             className={styles.signup}
-            onClick = {handleSubmit}
+            onClick={handleSubmit}
           >
             Sign Up
           </Button>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { expect } from 'chai';
 import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import APP from './App'
@@ -30,45 +29,45 @@ beforeAll(() => {
 })
 describe('<TotalProfit />', () => {
   it('Should has a Navbar', () => {
-    expect(wrapper.find(Navbar)).to.have.lengthOf(1);
+    expect(wrapper.find(Navbar).length).toBe(1);
   });
   it('Should has a Switch function', () => {
-    expect(wrapper.find(Switch)).to.have.lengthOf(1);
+    expect(wrapper.find(Switch).length).toBe(1);
   });
   it('Should has 11 different Route', () => {
-    expect(wrapper.find(Route)).to.have.lengthOf(12);
+    expect(wrapper.find(Route).length).toBe(12);
   });
   it('should show Home component for / router', () => {
-    expect(pathMap['/']).to.equal(Home);
+    expect(pathMap['/']).toEqual(Home);
   })
   it('should show register component for /register router', () => {
-    expect(pathMap['/register']).to.equal(Register);
+    expect(pathMap['/register']).toEqual(Register);
   })
   it('should show login component for /login router', () => {
-    expect(pathMap['/login']).to.equal(Login);
+    expect(pathMap['/login']).toEqual(Login);
   })
   it('should show create component for /create router', () => {
-    expect(pathMap['/create']).to.equal(Create);
+    expect(pathMap['/create']).toEqual(Create);
   })
   it('should show hosted component for /hosted router', () => {
-    expect(pathMap['/hosted']).to.equal(Hosted);
+    expect(pathMap['/hosted']).toEqual(Hosted);
   })
   it('should show edit component for /edit/:id router', () => {
-    expect(pathMap['/edit/:id']).to.equal(Edit);
+    expect(pathMap['/edit/:id']).toEqual(Edit);
   })
   it('should show listing component for /listings/:id router', () => {
-    expect(pathMap['/listings/:id']).to.equal(Listing);
+    expect(pathMap['/listings/:id']).toEqual(Listing);
   })
   it('should show requets component for /requests/:listingId router', () => {
-    expect(pathMap['/requests/:listingId']).to.equal(Requests);
+    expect(pathMap['/requests/:listingId']).toEqual(Requests);
   })
   it('should show review component for /review/:id/:listID router', () => {
-    expect(pathMap['/review/:id/:listID']).to.equal(Review);
+    expect(pathMap['/review/:id/:listID']).toEqual(Review);
   })
   it('should show profit component for /profit router', () => {
-    expect(pathMap['/profit']).to.equal(TotalProfit);
+    expect(pathMap['/profit']).toEqual(TotalProfit);
   })
   it('should show uploadfile component for /uploadfile router', () => {
-    expect(pathMap['/uploadfile']).to.equal(UploadFile);
+    expect(pathMap['/uploadfile']).toEqual(UploadFile);
   })
 })

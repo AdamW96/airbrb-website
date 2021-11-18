@@ -60,6 +60,7 @@ function Login (props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(event.currentTarget)
     const data = new FormData(event.currentTarget)
     loginFunction(
       data.get('email'),

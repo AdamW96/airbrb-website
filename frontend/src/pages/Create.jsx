@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   choosedButton: {
     borderRadius: 5,
     // border: '2px black solid',
-    padding: theme.spacing(3),
+    padding: theme.spacing(2),
     textAlign: 'center',
     color: '#3f51b5',
     border: '2px solid #3f51b5',
@@ -78,12 +78,13 @@ const useStyles = makeStyles((theme) => ({
   unChoosedButton: {
     borderRadius: 5,
     // border: '2px black solid',
-    padding: theme.spacing(3),
+    padding: theme.spacing(2),
     textAlign: 'center',
     border: '2px solid #b5b5b5',
   },
   amenitiesIcon: {
-    padding: theme.spacing(2),
+    height: theme.spacing(5),
+    width: theme.spacing(5),
   },
   input: {
     display: 'none',
