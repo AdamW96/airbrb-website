@@ -140,6 +140,35 @@ context('happy path', () => {
       .click()
     cy.get('#FinishPublish')
       .click()
+    // You can't book your own house, so we use a new account to log in
+    cy.wait(400) 
+    cy.get('#Logout')
+      .click({ force: true })
+    cy.get('#RegisterUser')
+      .click({ force: true })
+    const FirstNameNew = 'XINNEW';
+    const LastNameNew = 'CHENGNEW';
+    const emailNew = dynamicEmail + 'new' +'@ad.unsw.edu.au';
+    const passwordNew = 'Cx111111';
+    const confirmPasswordNew = 'Cx111111';
+    cy.get('#firstName')
+      .focus()
+      .type(FirstNameNew);
+    cy.get('#lastName')
+      .focus()
+      .type(LastNameNew);
+    cy.get('#email')
+      .focus()
+      .type(emailNew);
+    cy.get('#password')
+      .focus()
+      .type(passwordNew);
+    cy.get('#confirmPassword')
+      .focus()
+      .type(confirmPasswordNew);
+    cy.get('#register')
+      .click()    
+    cy.wait(400) 
     // Make a booking successfully 
     cy.get('#Home')
       .click()
