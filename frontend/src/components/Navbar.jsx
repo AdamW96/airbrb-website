@@ -166,7 +166,7 @@ function Navbar (props) {
           toCreate()
         }}
       >
-        <Typography>Create new list</Typography>
+        <Typography id='creatList'>Create new list</Typography>
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -198,7 +198,7 @@ function Navbar (props) {
           handleLogout()
         }}
       >
-        <Typography>Logout</Typography>
+        <Typography id='Logout'>Logout</Typography>
       </MenuItem>
     </Menu>
   )
@@ -214,10 +214,10 @@ function Navbar (props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>
-        <Typography onClick={toRegister}>Register</Typography>
+        <Typography id='RegisterUser' onClick={toRegister}>Register</Typography>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Typography onClick={toLogin}>Login</Typography>
+        <Typography id='login' onClick={toLogin}>Login</Typography>
       </MenuItem>
     </Menu>
   )
@@ -226,7 +226,7 @@ function Navbar (props) {
     <div>
       <AppBar position='fixed'>
         <Toolbar className={styles.toolbar}>
-          <Typography variant='h6' className={styles.logo} onClick={toHomePage}>
+          <Typography variant='h6' className={styles.logo} onClick={toHomePage} id='Home'>
             Home
           </Typography>
 

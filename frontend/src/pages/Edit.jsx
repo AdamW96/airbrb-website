@@ -392,6 +392,7 @@ export default function Edit (props) {
                 maxRows={4}
                 value={updateData.title}
                 onChange={handleChangeTitle}
+                id='newTitle'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -667,6 +668,7 @@ export default function Edit (props) {
                 <TextField
                   fullWidth
                   label='Youtube URL'
+                  id='NewThumbnail'
                   name='youtube'
                   type='text'
                   placeholder='Input youtube url'
@@ -683,6 +685,7 @@ export default function Edit (props) {
                 variant='contained'
                 color='primary'
                 onClick={submitSave}
+                id='save'
               >
                 Save
               </Button>

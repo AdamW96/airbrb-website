@@ -244,7 +244,8 @@ export default function Register (props) {
             variant='contained'
             color='primary'
             className={styles.signup}
-            onClick={handleSubmit}
+            onClick = {handleSubmit}
+            id='register'
           >
             Sign Up
           </Button>

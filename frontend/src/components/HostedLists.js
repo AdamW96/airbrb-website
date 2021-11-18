@@ -470,7 +470,7 @@ export default function HostedLists (props) {
                             variant = 'contained'
                             name={ele.id}
                             onClick={handleOpenUnPublishModal}
-
+                            id='Unpublish'
                           >
                             Unpublish
                           </Button>
@@ -482,6 +482,7 @@ export default function HostedLists (props) {
                             color='primary'
                             variant = 'contained'
                             onClick={handleOpenDateModal}
+                            id='Publish'
                           >
                             Publish
                           </Button>
@@ -535,7 +536,7 @@ export default function HostedLists (props) {
       >
         <div style={modalStyle} className={styles.paper}>
           <h3>Do you want to unpublish this list?</h3>
-          <Button size='large' color='primary' onClick={submitUnpublish}>
+          <Button size='large' color='primary' onClick={submitUnpublish} id='UnpublishButton'>
             Yes
           </Button>
           <Button
@@ -565,7 +566,7 @@ export default function HostedLists (props) {
                     variant='inline'
                     format='dd/MM/yyyy'
                     margin='normal'
-                    id='date-picker-inline'
+                    id='date-picker-inline1'
                     label='Choose Start Date'
                     value={startTime}
                     onChange={handleStartTimeChange}
@@ -580,7 +581,7 @@ export default function HostedLists (props) {
                     variant='inline'
                     format='dd/MM/yyyy'
                     margin='normal'
-                    id='date-picker-inline'
+                    id='date-picker-inline2'
                     label='Choose End Date'
                     value={endTime}
                     onChange={handleEndTimeChange}
@@ -594,7 +595,7 @@ export default function HostedLists (props) {
           </div>
           <Grid container>
             <Grid item xs={12}>
-              <Button size='large' color='primary' onClick={insertDate}>
+              <Button size='large' color='primary' onClick={insertDate} id='addData'>
                 Add Date
               </Button>
             </Grid>
@@ -603,7 +604,7 @@ export default function HostedLists (props) {
               {displayDate()}
             </Grid>
             <Grid item xs={6}>
-              <Button size='large' color='primary' onClick={publishList}>
+              <Button size='large' color='primary' onClick={publishList} id='FinishPublish'>
                 Publish
               </Button>
             </Grid>

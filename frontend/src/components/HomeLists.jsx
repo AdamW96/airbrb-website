@@ -74,7 +74,7 @@ function ListingBody ({ id, title, numReviews, price, thumbnail }) {
             </Grid>
         )}
         <CardContent>
-          <Typography variant='body2' color='textSecondary' align='center'>
+          <Typography variant='body2' color='textSecondary' align='center' id='titleOfCard'>
             <b>🔹 Title:{'  '}</b>
             {title}
           </Typography>
