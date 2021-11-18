@@ -182,7 +182,7 @@ function Navbar (props) {
           toHosted()
         }}
       >
-        <Typography>Hosted lists</Typography>
+        <Typography id='HostedListings'>Hosted lists</Typography>
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -190,7 +190,7 @@ function Navbar (props) {
           toTotalProfit()
         }}
       >
-        <Typography>My profit</Typography>
+        <Typography id='profit'>My profit</Typography>
       </MenuItem>
       <MenuItem
         onClick={() => {

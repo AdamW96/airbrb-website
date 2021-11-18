@@ -490,6 +490,7 @@ export default function HostedLists (props) {
                       </Grid>
                       <Grid item>
                         <Button
+                          id='BookingRequests'
                           size='small'
                           color='primary'
                           variant='contained'

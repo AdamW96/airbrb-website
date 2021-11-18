@@ -227,7 +227,7 @@ export default function CardBottom (props) {
                 </Button>
               </Grid>
               <Grid item xs={12}>
-                <Button variant='contained' onClick={deleteBook} color='secondary'>
+                <Button variant='contained' onClick={deleteBook} color='secondary' id='deleteBooking'>
                   Delete
                 </Button>
               </Grid>
@@ -241,13 +241,12 @@ export default function CardBottom (props) {
             </Button>
           )}
           {currentUser && !bookingInfo && (
-            // 这里先被我改了
             <Button variant='contained' disabled>
               Comment
             </Button>
           )}
           {currentUser && bookingInfo && (
-            <Button variant='contained' color='primary' onClick={() => { goReviewPage(bookingInfo.id, listingId) }}>
+            <Button variant='contained' color='primary' id='comment' onClick={() => { goReviewPage(bookingInfo.id, listingId) }}>
               Comment
             </Button>
           )}
@@ -345,6 +344,7 @@ export default function CardBottom (props) {
                 color='primary'
                 variant='contained'
                 onClick={handleCloseConfirm}
+                id='OKButton'
               >
                 Ok
               </Button>

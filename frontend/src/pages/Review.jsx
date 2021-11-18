@@ -73,13 +73,14 @@ export default function Review () {
           <Rating
             name="simple-controlled"
             value={scoreValue}
+            id='rating'
             onChange={(event, newValue) => {
               setValue(newValue);
             }}
           />
         </Box>
         <TextField
-          id="outlined-multiline-static"
+          id="commentContent"
           label="COMMENTS"
           multiline
           rows={4}
