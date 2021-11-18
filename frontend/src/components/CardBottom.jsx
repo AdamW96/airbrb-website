@@ -214,6 +214,7 @@ export default function CardBottom (props) {
               variant='contained'
               color='primary'
               onClick={handleOpenDate}
+              id='BookButton'
             >
               Book
             </Button>
@@ -279,6 +280,7 @@ export default function CardBottom (props) {
                       margin='normal'
                       value={selectStartDate}
                       onChange={handleSelectStartDate}
+                      id='bookStartTime'
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -290,6 +292,7 @@ export default function CardBottom (props) {
                       margin='normal'
                       value={selectEndDate}
                       onChange={handleSelectEndDate}
+                      id='bookEndTime'
                     />
                   </Grid>
                 </Grid>
@@ -302,6 +305,7 @@ export default function CardBottom (props) {
                     variant='contained'
                     color='primary'
                     onClick={submitBookDate}
+                    id='bookSubmit'
                   >
                     Book
                   </Button>

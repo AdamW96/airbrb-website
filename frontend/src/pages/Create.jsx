@@ -392,9 +392,11 @@ export default function Create (props) {
           if (i === Inputimage.length - 1) {
             const data = { ...dataState }
             data.thumbnail = thumbnailStr
+            console.log(data);
             fetchFunc('/listings/new', 'POST', data)
               .then((response) => {
                 if (response.status !== 200) {
+                  console.log(response.status);
                   showAlertMsg('error', 'invalid submit')
                   return
                 }
@@ -453,6 +455,7 @@ export default function Create (props) {
               <Button
                 variant='outlined'
                 name='entirePlace'
+                id='entirePlace'
                 className={
                   dataState.metadata.entirePlace
                     ? styles.choosedButton
@@ -504,6 +507,7 @@ export default function Create (props) {
                 fullWidth
                 // label='Street'
                 name='street'
+                id='street'
                 type='text'
                 placeholder='Input street'
                 helperText='Enter the street name and house number'
@@ -517,6 +521,7 @@ export default function Create (props) {
                 fullWidth
                 // label='City'
                 name='city'
+                id='city'
                 type='text'
                 placeholder='Input city'
                 helperText='Enter the city name'
@@ -531,6 +536,7 @@ export default function Create (props) {
                 fullWidth
                 // label='State'
                 name='state'
+                id='state'
                 type='text'
                 placeholder='Input state'
                 helperText='Enter the state name'
@@ -544,6 +550,7 @@ export default function Create (props) {
                 fullWidth
                 // label='Postcode'
                 name='postcode'
+                id='postcode'
                 type='number'
                 placeholder='Input postcode'
                 helperText='Enter the postcode number'
@@ -563,6 +570,7 @@ export default function Create (props) {
                 placeholder='Input Country'
                 // label='Country'
                 name='country'
+                id='country'
                 type='text'
                 helperText='Enter the country name'
                 value={dataState.address.country}
@@ -581,6 +589,7 @@ export default function Create (props) {
               <TextField
                 fullWidth
                 name='title'
+                id='title'
                 type='text'
                 placeholder='Input title'
                 value={dataState.title}
@@ -593,6 +602,7 @@ export default function Create (props) {
                 // label='Price per night'
                 fullWidth
                 name='price'
+                id='price'
                 type='number'
                 placeholder='Input price per night'
                 value={dataState.price}
@@ -616,6 +626,7 @@ export default function Create (props) {
                 placeholder='Input number of bathroom'
                 // label='Bathroom'
                 name='bathroom'
+                id='bathroom'
                 type='number'
                 value={dataState.metadata.bathRoomNumber}
                 onChange={handleChangeRooms}
@@ -662,6 +673,7 @@ export default function Create (props) {
                 <Button
                   variant='outlined'
                   name='pool'
+                  id='pool'
                   className={
                     dataState.metadata.pool
                       ? styles.choosedButton
@@ -822,6 +834,7 @@ export default function Create (props) {
                       value='video'
                       control={<Radio />}
                       label='video'
+                      id='video'
                     />
                   </RadioGroup>
                 </FormControl>
@@ -856,6 +869,7 @@ export default function Create (props) {
                   <TextField
                     fullWidth
                     label='Youtube URL'
+                    id='youtube'
                     name='youtube'
                     type='text'
                     placeholder='Input youtube url'
@@ -898,6 +912,7 @@ export default function Create (props) {
                 color='primary'
                 size='large'
                 onClick={handleNextPage}
+                id='next'
               >
                 Next
               </Button>
@@ -907,6 +922,7 @@ export default function Create (props) {
                 variant='contained'
                 color='primary'
                 size='large'
+                id='submit'
                 onClick={handleSubmit}
               >
                 Submit

@@ -91,7 +91,7 @@ function Login (props) {
             margin='normal'
             required
             fullWidth
-            id='email'
+            id='emailLogin'
             label='Email Address'
             name='email'
             autoComplete='email'
@@ -104,7 +104,7 @@ function Login (props) {
             name='password'
             label='Password'
             type='password'
-            id='password'
+            id='PasswordLogin'
             autoComplete='current-password'
           />
           <br />
@@ -114,6 +114,7 @@ function Login (props) {
             fullWidth
             variant='contained'
             color='primary'
+            id='LoginButton'
           >
             Sign In
           </Button>
