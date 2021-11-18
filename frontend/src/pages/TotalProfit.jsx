@@ -43,6 +43,7 @@ function TotalProfit (props) {
       })
     })
   }, [])
+  console.log(validListingID);
   useEffect(() => {
     fetchFunc('/bookings', 'GET').then((response) => {
       if (response.status !== 200) {
