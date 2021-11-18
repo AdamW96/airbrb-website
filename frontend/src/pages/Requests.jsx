@@ -185,6 +185,7 @@ export default function Requests (props) {
                     color='primary'
                     variant='contained'
                     onClick={acceptRequest}
+                    id='accept'
                   >
                     Accept
                   </Button>
