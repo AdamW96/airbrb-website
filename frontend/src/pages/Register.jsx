@@ -102,6 +102,11 @@ export default function Register (props) {
   const [emailState, setEmailState] = React.useState('')
   const history = useHistory()
   const styles = useStyle()
+  const [testcounter, settestcounter] = React.useState(0)
+
+  const handlecounter = () => {
+    settestcounter(testcounter + 1)
+  }
 
   const toHomePage = () => {
     history.push('/')
@@ -178,6 +183,7 @@ export default function Register (props) {
                 id='firstName'
                 label='First Name'
                 autoFocus
+                value={firstName}
                 onChange={handleFirstName}
               />
             </Grid>
@@ -189,6 +195,8 @@ export default function Register (props) {
                 label='Last Name'
                 name='lastName'
                 autoComplete='family-name'
+                value={testcounter}
+                onClick = {handlecounter}
                 onChange={handleLastName}
               />
             </Grid>
@@ -200,6 +208,7 @@ export default function Register (props) {
                 label='Email Address'
                 name='email'
                 autoComplete='email'
+                value = {emailState}
                 onChange={handleEmail}
               />
             </Grid>

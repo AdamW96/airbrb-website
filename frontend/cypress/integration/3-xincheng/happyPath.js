@@ -10,7 +10,7 @@ context('happy path', () => {
       .click({ force: true })
     const FirstName = 'XIN';
     const LastName = 'CHENG';
-    const email = dynamicEmail+'@ad.unsw.edu.au';
+    const email = dynamicEmail + '@ad.unsw.edu.au';
     const password = 'Cx111111';
     const confirmPassword = 'Cx111111';
     cy.get('#firstName')
@@ -29,8 +29,8 @@ context('happy path', () => {
       .focus()
       .type(confirmPassword);
     cy.get('#register')
-      .click()    
-    cy.wait(400) 
+      .click()
+    cy.wait(400)
     cy.get('#Logout')
       .click({ force: true })
     cy.get('#login')
@@ -141,14 +141,14 @@ context('happy path', () => {
     cy.get('#FinishPublish')
       .click()
     // You can't book your own house, so we use a new account to log in
-    cy.wait(400) 
+    cy.wait(400)
     cy.get('#Logout')
       .click({ force: true })
     cy.get('#RegisterUser')
       .click({ force: true })
     const FirstNameNew = 'XINNEW';
     const LastNameNew = 'CHENGNEW';
-    const emailNew = dynamicEmail + 'new' +'@ad.unsw.edu.au';
+    const emailNew = dynamicEmail + 'new' + '@ad.unsw.edu.au';
     const passwordNew = 'Cx111111';
     const confirmPasswordNew = 'Cx111111';
     cy.get('#firstName')
@@ -167,9 +167,9 @@ context('happy path', () => {
       .focus()
       .type(confirmPasswordNew);
     cy.get('#register')
-      .click()    
-    cy.wait(400) 
-    // Make a booking successfully 
+      .click()
+    cy.wait(400)
+    // Make a booking successfully
     cy.get('#Home')
       .click()
     cy.get('#titleOfCard')
@@ -186,7 +186,7 @@ context('happy path', () => {
     cy.get('#bookSubmit')
       .click()
     // Logs out of the application successfully
-    cy.wait(400) 
+    cy.wait(400)
     cy.get('#Logout')
       .click({ force: true })
     // Logs back into the application successfully
