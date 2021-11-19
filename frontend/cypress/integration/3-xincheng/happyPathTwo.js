@@ -97,7 +97,9 @@ context('happy path two', () => {
     cy.wait(400)
     // Check all Hosted Listings
     cy.get('#HostedListings').click({ force: true })
+    // Check one of hosted listing and check its booking statue.
     cy.get('#BookingRequests').click()
+    // Accept the this booking
     cy.get('#accept').click()
     // Check profit
     cy.get('#profit').click({ force: true })
