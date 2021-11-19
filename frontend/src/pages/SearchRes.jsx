@@ -155,7 +155,6 @@ export default function SearchRes (props) {
           )
         })}
       </Grid>
-      {console.log(searchResList)}
     </Container>
   )
 }
